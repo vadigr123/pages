@@ -1,8 +1,8 @@
 (function () {
   "use strict";
 
-  const GRID_COLS = 12;
-  const GRID_ROWS = 8;
+  const GRID_COLS = 10;
+  const GRID_ROWS = 7;
   const STORAGE_KEY = "lofi-win-grid-v1";
   const GRID_WINDOW_IDS = [
     "player-win",
@@ -14,12 +14,12 @@
   ];
 
   const DEFAULT_LAYOUT = {
-    "player-win": { col: 0, row: 0, colSpan: 4, rowSpan: 4 },
-    "library-win": { col: 0, row: 4, colSpan: 4, rowSpan: 4 },
-    "bio-win": { col: 4, row: 0, colSpan: 8, rowSpan: 3 },
-    "playlist-win": { col: 4, row: 3, colSpan: 4, rowSpan: 3 },
-    "vibe-win": { col: 8, row: 3, colSpan: 4, rowSpan: 3 },
-    "settings-win": { col: 4, row: 6, colSpan: 8, rowSpan: 2 },
+    "player-win": { col: 0, row: 0, colSpan: 3, rowSpan: 2 },
+    "library-win": { col: 0, row: 2, colSpan: 3, rowSpan: 2 },
+    "bio-win": { col: 3, row: 0, colSpan: 3, rowSpan: 2 },
+    "playlist-win": { col: 3, row: 2, colSpan: 3, rowSpan: 2 },
+    "vibe-win": { col: 6, row: 0, colSpan: 2, rowSpan: 2 },
+    "settings-win": { col: 6, row: 2, colSpan: 2, rowSpan: 2 },
   };
 
   let layout = {};
@@ -136,6 +136,15 @@
     const top = rect.row * metrics.cellH;
     const width = rect.colSpan * metrics.cellW - 8;
     const height = rect.rowSpan * metrics.cellH - 8;
+    if (win.classList.contains("minimized")) {
+      const titlebar = win.querySelector(".win-titlebar");
+      const barHeight = titlebar ? titlebar.getBoundingClientRect().height : 34;
+      win.style.left = left + 4 + "px";
+      win.style.top = Math.max(4, metrics.height - barHeight - 4) + "px";
+      win.style.width = Math.max(120, width) + "px";
+      win.style.height = Math.max(barHeight, 34) + "px";
+      return;
+    }
     win.style.left = left + 4 + "px";
     win.style.top = top + 4 + "px";
     win.style.width = Math.max(120, width) + "px";
@@ -387,6 +396,7 @@
     },
     syncDeviceMode: syncDeviceMode,
     resetToDefault: resetToDefault,
+    applyAllLayouts: applyAllLayouts,
     isEnabled: function () {
       return enabled;
     },

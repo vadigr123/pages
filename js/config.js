@@ -32,7 +32,12 @@
    *   "https://soundcloud.com/user/sets/playlist-b",
    * ];
    */
-  window.SOUNDCLOUD_PLAYLIST_URL = "https://soundcloud.com/ellybean-800904304/sets/dreamcore-weirdcore-playlist";
+  window.SOUNDCLOUD_PLAYLIST_URL = ["https://soundcloud.com/ellybean-800904304/sets/dreamcore-weirdcore-playlist",
+    "https://soundcloud.com/vadigr123/sets/dreamcore-by-mikus",
+    "https://soundcloud.com/luaprince/sets/work-playlist-minecraft",
+    "https://soundcloud.com/alternetpikachu3/sets/roblox-doors-ost",
+    "https://soundcloud.com/vadigr123/sets/just-music-by-mikus",
+  ];
 
   window.getSoundCloudPlaylistUrls = function () {
     const raw = window.SOUNDCLOUD_PLAYLIST_URLS != null ? window.SOUNDCLOUD_PLAYLIST_URLS : window.SOUNDCLOUD_PLAYLIST_URL;
@@ -93,7 +98,7 @@
   };
 
   window.getActiveTracks = function () {
-    return window.getUnifiedTracks();
+    return window.getSourceTracks(window.activePlaylistFolderIndex);
   };
 
   window.getActiveFolderLabel = function () {

@@ -176,7 +176,9 @@
     isActive: function () {
       return state.active && state.ready && !state.failed && isSecurePage();
     },
-    canEmbed: isSecurePage,
+    canEmbed: function () {
+      return !state.failed && isSecurePage();
+    },
     resolveTitle: resolveSoundTitle,
     unlock: waitForUserGesture,
     getSounds: function () {

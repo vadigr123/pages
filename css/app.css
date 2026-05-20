@@ -130,9 +130,13 @@
     overflow: hidden;
     transition: background 0.3s, border-color 0.2s;
     position: relative;
+    padding-bottom: 36px;
   }
   .window:hover { border-color: var(--accent); }
   .window.minimized .win-body { display: none; }
+  .window.minimized { min-height: 0; height: auto !important; }
+  .window.minimized .win-title { display: none; }
+  .window.minimized .win-titlebar { border-bottom: none; }
 
   .win-titlebar {
     background: var(--titlebar);
@@ -150,6 +154,18 @@
     flex: 1;
     color: var(--accent-ink);
     letter-spacing: 1px;
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 6px 10px;
+    background: var(--titlebar);
+    border-top: 1px solid var(--border);
+    z-index: 5;
+  }
+  .win-body {
+    padding: 1rem;
+    padding-bottom: 42px;
   }
   .win-controls { display: flex; gap: 5px; }
   .win-btn {
@@ -501,6 +517,15 @@
     object-fit: cover;
     display: block;
   }
+
+  .bio-status {
+    margin-top: 0.25rem;
+    color: var(--text-muted);
+    font-size: 0.92rem;
+    line-height: 1.2;
+  }
+
+
 
   .taskbar-nav {
     display: flex;
@@ -1458,6 +1483,111 @@ body.no-os-cursor {
   pointer-events: none;
   text-align: center;
   white-space: nowrap;
+}
+
+/* ===== ONBOARDING HINT ===== */
+.onboarding-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  z-index: 5000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.onboarding-content {
+  width: min(420px, 100%);
+  background: var(--win-bg);
+  border: 2px solid var(--accent);
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  animation: slideUp 0.35s ease;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.onboarding-header h2 {
+  font-family: "Syne", sans-serif;
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--accent-ink);
+  margin-bottom: 16px;
+}
+
+.onboarding-body {
+  margin-bottom: 20px;
+}
+
+.onboarding-body p {
+  font-family: "Space Mono", monospace;
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--text);
+  margin: 0;
+}
+
+.onboarding-body p:first-child {
+  font-weight: 700;
+  color: var(--accent-ink);
+}
+
+.onboarding-footer {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+.onboarding-btn {
+  font-family: "VT323", monospace;
+  font-size: 15px;
+  padding: 8px 16px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--bg3);
+  color: var(--text);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.onboarding-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent-ink);
+  background: rgba(255, 214, 0, 0.08);
+}
+
+.onboarding-btn:active {
+  transform: scale(0.96);
+}
+
+[data-theme="white"] .onboarding-content {
+  background: var(--win-bg);
+  border-color: #000000;
+}
+
+[data-theme="white"] .onboarding-body p:first-child {
+  color: #000000;
 }
 
 .edge-pull-zone {

@@ -164,6 +164,36 @@
     return localAudio;
   }
 
+  function stopLocalAudio() {
+    if (!localAudio) return;
+    try {
+      localAudio.pause();
+    } catch {
+      /**/
+    }
+    isPlaying = false;
+    setPlayIcon(false);
+    const vinyl = document.getElementById("vinyl");
+    const win = document.getElementById("player-win");
+    if (vinyl) vinyl.classList.remove("playing");
+    if (win) win.classList.remove("playing-window");
+  }
+
+  function stopScPlayback() {
+    if (!window.SoundCloudPlayer || !SoundCloudPlayer.isActive()) return;
+    try {
+      SoundCloudPlayer.pause();
+    } catch {
+      /**/
+    }
+    isPlaying = false;
+    setPlayIcon(false);
+    const vinyl = document.getElementById("vinyl");
+    const win = document.getElementById("player-win");
+    if (vinyl) vinyl.classList.remove("playing");
+    if (win) win.classList.remove("playing-window");
+  }
+
   let currentQueueIdx = 0;
   let isPlaying = false;
   let isShuffle = false;
@@ -182,6 +212,7 @@
     "playlist-win": { tb: "tb-playlist", di: "di-playlist", dock: "dock-playlist" },
     "vibe-win": { tb: "tb-vibe", di: "di-vibe", dock: "dock-vibe" },
     "settings-win": { tb: "tb-settings", di: "di-settings", dock: "dock-settings" },
+
     "paint-win": { tb: null, di: null, dock: null },
     "calc-win": { tb: null, di: null, dock: null },
     "calendar-win": { tb: null, di: null, dock: null },
@@ -279,15 +310,8 @@
   }
 
   async function resolveTrackCover(filePath) {
-    const base = String(filePath || "")
-      .split(/[\\/]/)
-      .pop()
-      .replace(/\.[^.]+$/, "");
-    const candidates = IMAGE_EXT.map(function (ext) {
-      return "img/thumbnail.player/" + base + "." + ext;
-    });
-    const found = await firstAvailableImage(candidates);
-    return found || null;
+    // Avoid probing for many per-track names and rely on default thumbnails when no explicit cover is provided.
+    return null;
   }
 
   async function parseReferenceListFile(filePath) {
@@ -570,6 +594,24 @@
       }
       window.nextTrack();
     });
+
+    audio.addEventListener("pause", function () {
+      setPlayIcon(false);
+      isPlaying = false;
+      const vinyl = document.getElementById("vinyl");
+      const win = document.getElementById("player-win");
+      if (vinyl) vinyl.classList.remove("playing");
+      if (win) win.classList.remove("playing-window");
+    });
+
+    audio.addEventListener("play", function () {
+      setPlayIcon(true);
+      isPlaying = true;
+      const vinyl = document.getElementById("vinyl");
+      const win = document.getElementById("player-win");
+      if (vinyl) vinyl.classList.add("playing");
+      if (win) win.classList.add("playing-window");
+    });
   }
 
   function bindScWidgetUi() {
@@ -684,6 +726,7 @@
   }
 
   function playScTrack(t, autoPlay) {
+    stopLocalAudio();
     const plUrl = t.scPlaylistUrl || String(window.SOUNDCLOUD_PLAYLIST_URL || "").trim();
     const scIdx = typeof t.scIndex === "number" ? t.scIndex : 0;
     playerMode = "soundcloud";
@@ -707,6 +750,7 @@
       return;
     }
     playerMode = "local";
+    stopScPlayback();
     const audio = getAudio();
     if (!audio) return;
     if (isPlaying) audio.pause();
@@ -802,18 +846,23 @@
     }
     const audio = getAudio();
     if (!audio) return;
-    if (isPlaying) {
-      audio.pause();
-      setPlayIcon(false);
-      document.getElementById("vinyl").classList.remove("playing");
-      document.getElementById("player-win").classList.remove("playing-window");
-    } else {
+    if (!audio.src) {
+      loadTrack(currentQueueIdx, true);
+      return;
+    }
+    if (audio.paused) {
       audio.play().catch(function () {});
       setPlayIcon(true);
       document.getElementById("vinyl").classList.add("playing");
       document.getElementById("player-win").classList.add("playing-window");
+      isPlaying = true;
+    } else {
+      audio.pause();
+      setPlayIcon(false);
+      document.getElementById("vinyl").classList.remove("playing");
+      document.getElementById("player-win").classList.remove("playing-window");
+      isPlaying = false;
     }
-    isPlaying = !isPlaying;
   };
 
   window.setPlayIcon = function (playing) {
@@ -1093,6 +1142,16 @@
     return m ? m[1].toUpperCase() : "—";
   }
 
+  function restoreWindowPosition(win) {
+    if (!win) return;
+    win.style.position = "absolute";
+    win.style.bottom = "";
+    win.style.top = "";
+    if (window.WindowGrid && window.WindowGrid.isEnabled() && typeof window.WindowGrid.applyAllLayouts === "function") {
+      window.WindowGrid.applyAllLayouts();
+    }
+  }
+
   window.showWin = function (id, tbId) {
     const win = document.getElementById(id);
     if (!win) return;
@@ -1100,9 +1159,11 @@
     const isMin = win.classList.contains("minimized");
     if (isHidden) {
       win.style.display = "";
+      if (isMin) restoreWindowPosition(win);
       win.classList.remove("minimized");
     } else if (isMin) {
       win.classList.remove("minimized");
+      restoreWindowPosition(win);
     } else {
       win.style.display = "none";
     }
@@ -1112,16 +1173,29 @@
   window.toggleWin = function (id) {
     const win = document.getElementById(id);
     if (!win) return;
-    win.style.display = win.style.display === "none" ? "" : "none";
-    if (win.classList.contains("minimized") && win.style.display !== "none") {
+    const nextHidden = win.style.display === "";
+    win.style.display = nextHidden ? "none" : "";
+    if (!nextHidden && win.classList.contains("minimized")) {
       win.classList.remove("minimized");
+      restoreWindowPosition(win);
     }
     syncWinState(id);
   };
 
   window.minimizeWin = function (id) {
     const w = document.getElementById(id);
+    if (!w) return;
+    const willMinimize = !w.classList.contains("minimized");
     w.classList.toggle("minimized");
+    if (willMinimize) {
+      w.style.position = "fixed";
+      w.style.bottom = "4px";
+      w.style.top = "";
+      w.style.height = "";
+      w.style.zIndex = "1001";
+    } else {
+      restoreWindowPosition(w);
+    }
     syncWinState(id);
   };
 
@@ -1613,8 +1687,8 @@
     drawing: false,
     color: "#FFD600",
     size: 3,
-    w: 360,
-    h: 260,
+    w: 1024,
+    h: 1024,
   };
 
   const PALETTE = ["#FFD600", "#ffffff", "#000000", "#ff5f57", "#007aff", "#28c840"];
@@ -1958,6 +2032,56 @@
     });
   }
 
+  function formatLanyardStatus(status) {
+    if (!status) return "Unavailable";
+    return status.charAt(0).toUpperCase() + status.slice(1);
+  }
+
+  function updateLanyardStatusElement(userId, payload) {
+    const statusElement = document.getElementById("lanyard-status-" + userId);
+    if (!statusElement) return;
+
+    if (!payload || !payload.discord_status) {
+      statusElement.textContent = "Status: unavailable";
+      return;
+    }
+
+    const presence = formatLanyardStatus(payload.discord_status);
+    let activityText = "";
+    if (Array.isArray(payload.activities) && payload.activities.length > 0) {
+      const activity = payload.activities[0];
+      if (activity && activity.name) {
+        activityText = " — " + activity.name;
+      }
+    }
+
+    statusElement.textContent = "Status: " + presence + activityText;
+  }
+
+  async function fetchLanyardProfiles() {
+    const ids = ["892429048771399680", "837064341315911741"];
+
+    await Promise.all(
+      ids.map(async function (id) {
+        try {
+          const response = await fetch("https://api.lanyard.rest/v1/users/" + id);
+          if (!response.ok) {
+            updateLanyardStatusElement(id, null);
+            return;
+          }
+          const result = await response.json();
+          if (!result || !result.data) {
+            updateLanyardStatusElement(id, null);
+            return;
+          }
+          updateLanyardStatusElement(id, result.data);
+        } catch (error) {
+          updateLanyardStatusElement(id, null);
+        }
+      }),
+    );
+  }
+
   function initPoyoPet() {
     const btn = document.getElementById("poyo-pet-btn");
     const img = document.getElementById("poyo-pet-img");
@@ -2111,6 +2235,8 @@
     }
     ensurePaint();
     window.bootstrapLofiOs();
+    fetchLanyardProfiles();
+    setInterval(fetchLanyardProfiles, 60000);
     window.renderCalendar();
     paintRefreshI18n();
     paintToolSync();

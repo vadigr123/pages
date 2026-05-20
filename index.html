@@ -33,16 +33,32 @@
 
   <span id="swipe-hint" class="swipe-hint"></span>
 
+  <!-- ONBOARDING HINT -->
+  <div id="onboarding-overlay" class="onboarding-overlay" style="display:none;">
+    <div class="onboarding-content">
+      <div class="onboarding-header">
+        <h2>👋 Welcome!</h2>
+      </div>
+      <div class="onboarding-body">
+        <p><strong>This is a constructor, and the windows can be moved.!</strong></p>
+        <p style="font-size: 14px; color: var(--text-muted); margin-top: 8px;">Try dragging the windows by their headers to customize the interface.</p>
+      </div>
+      <div class="onboarding-footer">
+        <button type="button" class="onboarding-btn" onclick="dismissOnboarding()">I understand 👍</button>
+      </div>
+    </div>
+  </div>
+
   <!-- TASKBAR -->
   <div class="taskbar">
     <span class="taskbar-logo">~/lofi.os</span>
     <span class="taskbar-sep">|</span>
     <!-- Nav URLs target GitHub Pages; file:// local opens may log harmless cross-origin warnings -->
     <nav class="taskbar-nav" aria-label="Site pages">
-      <a class="bio-link active" href="https://vadigr123.github.io/">[~/pages]</a>
-      <a class="bio-link" href="https://vadigr123.github.io/pages/e621/">[e621/]</a>
-      <a class="bio-link" href="https://vadigr123.github.io/pages/Metadata/">[metadata/]</a>
-      <a class="bio-link" href="https://vadigr123.github.io/pages/ideas-board/">[ideas/]</a>
+      <a class="bio-link active" href="./">[~/pages]</a>
+      <a class="bio-link" href="./pages/e621-main/index.html">[e621/]</a>
+      <a class="bio-link" href="./pages/Metadata/metamouse.html">[metadata/]</a>
+      <a class="bio-link" href="./pages/ideas-board-main/index.html">[ideas/]</a>
     </nav>
     <div class="hidden-menu-wrap hidden-menu-wrap-taskbar">
       <button type="button" class="hidden-apps-btn tb-apps" id="hidden-menu-btn" data-i18n="hiddenMenuBtn"
@@ -140,12 +156,7 @@
       <div class="dock-dot"></div>
       <div class="dock-tooltip" data-i18n="dockSettings"></div>
     </div>
-    <div class="dock-sep"></div>
-    <div class="dock-item dock-open" id="dock-vibe" onclick="showWin('vibe-win','tb-vibe')">
-      <div class="dock-icon">📀</div>
-      <div class="dock-dot"></div>
-      <div class="dock-tooltip" data-i18n="dockMeta"></div>
-    </div>
+
   </div>
 
   <div class="desktop">
@@ -159,9 +170,7 @@
           <div class="win-titlebar">
             <div class="win-controls">
               <button type="button" class="win-btn close" onclick="toggleWin('player-win')" aria-label="close"></button>
-              <button type="button" class="win-btn minimize" onclick="minimizeWin('player-win')"></button>
-              <button type="button" class="win-btn expand" onclick="expandWin('player-win')"></button>
-            </div>
+             </div>
             <span class="win-title" data-i18n="winPlayer"></span>
             <span style="font-size:12px">▶</span>
           </div>
@@ -231,9 +240,7 @@
           <div class="win-titlebar">
             <div class="win-controls">
               <button type="button" class="win-btn close" onclick="toggleWin('library-win')"></button>
-              <button type="button" class="win-btn minimize" onclick="minimizeWin('library-win')"></button>
-              <button type="button" class="win-btn expand" onclick="expandWin('library-win')"></button>
-            </div>
+              </div>
             <span class="win-title" data-i18n="winLibrary"></span>
           </div>
           <div class="win-body">
@@ -258,9 +265,7 @@
           <div class="win-titlebar">
             <div class="win-controls">
               <button type="button" class="win-btn close" onclick="toggleWin('bio-win')"></button>
-              <button type="button" class="win-btn minimize" onclick="minimizeWin('bio-win')"></button>
-              <button type="button" class="win-btn expand" onclick="expandWin('bio-win')"></button>
-            </div>
+             </div>
             <span class="win-title" data-i18n="winBio"></span>
           </div>
           <div class="win-body">
@@ -272,6 +277,7 @@
                   <div>
                     <div class="bio-name">Your Name</div>
                     <div class="bio-handle">@username</div>
+                    <div class="bio-status" id="lanyard-status-892429048771399680">Status: loading...</div>
                     <div class="bio-tags">
                       <span class="bio-tag">lo-fi</span>
                       <span class="bio-tag">dev</span>
@@ -291,6 +297,7 @@
                   <div>
                     <div class="bio-name">Second Name</div>
                     <div class="bio-handle">@second</div>
+                    <div class="bio-status" id="lanyard-status-837064341315911741">Status: loading...</div>
                     <div class="bio-tags">
                       <span class="bio-tag">art</span>
                       <span class="bio-tag">furry</span>
@@ -312,9 +319,7 @@
           <div class="win-titlebar">
             <div class="win-controls">
               <button type="button" class="win-btn close" onclick="toggleWin('playlist-win')"></button>
-              <button type="button" class="win-btn minimize" onclick="minimizeWin('playlist-win')"></button>
-              <button type="button" class="win-btn expand" onclick="expandWin('playlist-win')"></button>
-            </div>
+             </div>
             <span class="win-title" data-i18n="winPlaylist"></span>
           </div>
           <div class="win-body win-body-pad">
@@ -328,9 +333,7 @@
           <div class="win-titlebar">
             <div class="win-controls">
               <button type="button" class="win-btn close" onclick="toggleWin('vibe-win')"></button>
-              <button type="button" class="win-btn minimize" onclick="minimizeWin('vibe-win')"></button>
-              <button type="button" class="win-btn expand" onclick="expandWin('vibe-win')"></button>
-            </div>
+              </div>
             <span class="win-title" data-i18n="winMeta"></span>
           </div>
           <div class="win-body">
@@ -360,9 +363,7 @@
           <div class="win-titlebar">
             <div class="win-controls">
               <button type="button" class="win-btn close" onclick="toggleWin('settings-win')"></button>
-              <button type="button" class="win-btn minimize" onclick="minimizeWin('settings-win')"></button>
-              <button type="button" class="win-btn expand" onclick="expandWin('settings-win')"></button>
-            </div>
+              </div>
             <span class="win-title" data-i18n="winSettings"></span>
           </div>
           <div class="win-body">
@@ -401,13 +402,11 @@
     </div>
   </div>
 
-  <div class="window" id="paint-win" style="display:none;position:fixed;top:140px;right:16px;width:min(720px,calc(100vw - 32px));z-index:800">
+  <div class="window" id="paint-win" style="display:none;position:fixed;top:80px;right:16px;width:min(1040px,calc(100vw - 32px));height:min(1040px,calc(100vh - 40px));z-index:800">
     <div class="win-titlebar">
       <div class="win-controls">
         <button type="button" class="win-btn close" onclick="toggleWin('paint-win')"></button>
-        <button type="button" class="win-btn minimize" onclick="minimizeWin('paint-win')"></button>
-        <button type="button" class="win-btn expand" onclick="expandWin('paint-win')"></button>
-      </div>
+        </div>
       <span class="win-title">🎨 paint.layers</span>
     </div>
     <div class="win-body paint-wrap">
@@ -436,9 +435,7 @@
     <div class="win-titlebar">
       <div class="win-controls">
         <button type="button" class="win-btn close" onclick="toggleWin('calc-win')"></button>
-        <button type="button" class="win-btn minimize" onclick="minimizeWin('calc-win')"></button>
-        <button type="button" class="win-btn expand" onclick="expandWin('calc-win')"></button>
-      </div>
+        </div>
       <span class="win-title">🔢 calculator</span>
     </div>
     <div class="win-body">
@@ -463,9 +460,7 @@
           <button type="button" class="calc-btn op" onclick="calcTap('+')">+</button>
           <button type="button" class="calc-btn" onclick="calcTap('⌫')">⌫</button>
           <button type="button" class="calc-btn" onclick="calcTap('0')">0</button>
-          <button type="button" class="calc-btn" onclick="calcTap('.')">.</button>
-          <button type="button" class="calc-btn op" onclick="calcTap('=')">=</button>
-        </div>
+          </div>
       </div>
     </div>
   </div>
@@ -475,9 +470,7 @@
     <div class="win-titlebar">
       <div class="win-controls">
         <button type="button" class="win-btn close" onclick="toggleWin('calendar-win')"></button>
-        <button type="button" class="win-btn minimize" onclick="minimizeWin('calendar-win')"></button>
-        <button type="button" class="win-btn expand" onclick="expandWin('calendar-win')"></button>
-      </div>
+        </div>
       <span class="win-title">📅 calendar</span>
     </div>
     <div class="win-body">
@@ -497,9 +490,7 @@
     <div class="win-titlebar">
       <div class="win-controls">
         <button type="button" class="win-btn close" onclick="toggleWin('autoclick-win')"></button>
-        <button type="button" class="win-btn minimize" onclick="minimizeWin('autoclick-win')"></button>
-        <button type="button" class="win-btn expand" onclick="expandWin('autoclick-win')"></button>
-      </div>
+        </div>
       <span class="win-title">🧀 clicker.game</span>
     </div>
     <div class="win-body">
@@ -515,6 +506,7 @@
   </div>
 
   <script defer src="./js/os-theme.js"></script>
+  <script defer src="./js/onboarding.js"></script>
   <script defer src="./js/i18n.js"></script>
   <script defer src="./js/config.js"></script>
   <script defer src="./js/soundcloud-player.js"></script>
