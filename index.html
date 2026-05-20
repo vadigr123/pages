@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="uk">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title data-i18n="pageTitle">~/lofi.os</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link
+    href="https://fonts.googleapis.com/css2?family=VT323&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@400;700;800&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="./css/app.css">
+</head>
+
+<body class="device-auto">
+  <canvas id="rain"></canvas>
+  <iframe id="sc-widget" title="SoundCloud player" aria-hidden="true"
+    allow="autoplay; encrypted-media; fullscreen"
+    style="visibility:hidden;position:absolute;width:1px;height:1px;left:-9999px;border:0"></iframe>
+  <button id="poyo-pet-btn" class="poyo-pet" type="button" title="poyo pet">
+    <img id="poyo-pet-img" alt="poyo pet" />
+  </button>
+
+  <div id="edge-pull-zone" aria-hidden="true"></div>
+
+  <div id="app-switch-backdrop" class="app-switch-backdrop" onclick="closeAppSwitcher()">
+    <div class="app-switch-sheet" onclick="event.stopPropagation()">
+      <div class="pull-bar"></div>
+      <div class="switch-title" id="switcher-label" data-i18n="switcherTitle"></div>
+      <div id="switch-card-list" class="switch-cards"></div>
+    </div>
+  </div>
+
+  <span id="swipe-hint" class="swipe-hint"></span>
+
+  <!-- TASKBAR -->
+  <div class="taskbar">
+    <span class="taskbar-logo">~/lofi.os</span>
+    <span class="taskbar-sep">|</span>
+    <!-- Nav URLs target GitHub Pages; file:// local opens may log harmless cross-origin warnings -->
+    <nav class="taskbar-nav" aria-label="Site pages">
+      <a class="bio-link active" href="https://vadigr123.github.io/">[~/pages]</a>
+      <a class="bio-link" href="https://vadigr123.github.io/pages/e621/">[e621/]</a>
+      <a class="bio-link" href="https://vadigr123.github.io/pages/Metadata/">[metadata/]</a>
+      <a class="bio-link" href="https://vadigr123.github.io/pages/ideas-board/">[ideas/]</a>
+    </nav>
+    <div class="hidden-menu-wrap hidden-menu-wrap-taskbar">
+      <button type="button" class="hidden-apps-btn tb-apps" id="hidden-menu-btn" data-i18n="hiddenMenuBtn"
+        onclick="toggleHiddenMenu(event)"></button>
+      <div class="hidden-dropdown" id="hidden-dropdown">
+        <div class="hidden-item" onclick="openHiddenApp('paint-win',event)">🎨 paint.layers</div>
+        <div class="hidden-item" onclick="openHiddenApp('calc-win',event)">🔢 calculator.app</div>
+        <div class="hidden-item" onclick="openHiddenApp('calendar-win',event)">📅 calendar.app</div>
+        <div class="hidden-item" onclick="openHiddenApp('autoclick-win',event)">🧀 clicker.game</div>
+      </div>
+    </div>
+
+    <div class="taskbar-wins">
+      <button type="button" class="tb-win-btn tb-active" id="tb-player"
+        onclick="showWin('player-win','tb-player')"><span data-i18n="tbPlayer"></span></button>
+      <button type="button" class="tb-win-btn tb-active" id="tb-library"
+        onclick="showWin('library-win','tb-library')"><span data-i18n="tbLibrary"></span></button>
+      <button type="button" class="tb-win-btn tb-active" id="tb-bio"
+        onclick="showWin('bio-win','tb-bio')"><span data-i18n="tbBio"></span></button>
+      <button type="button" class="tb-win-btn tb-active" id="tb-playlist"
+        onclick="showWin('playlist-win','tb-playlist')"><span data-i18n="tbPlaylist"></span></button>
+      <button type="button" class="tb-win-btn tb-active" id="tb-vibe"
+        onclick="showWin('vibe-win','tb-vibe')"><span data-i18n="tbMeta"></span></button>
+      <button type="button" class="tb-win-btn tb-active" id="tb-settings"
+        onclick="showWin('settings-win','tb-settings')"><span data-i18n="tbSettings"></span></button>
+    </div>
+    <span
+      style="font-size:12px;color:var(--text-muted);margin-left:auto;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:180px"
+      id="now-playing-bar">♫</span>
+    <div class="theme-btns" style="margin-left:8px">
+      <div class="theme-btn dark active" title="dark" onclick="setTheme('dark',this)"></div>
+      <div class="theme-btn white" title="light" onclick="setTheme('white',this)"></div>
+    </div>
+    <span class="taskbar-clock" id="clock">00:00:00</span>
+  </div>
+
+  <!-- DESKTOP SIDEBAR -->
+  <div class="desktop-icons" id="desktop-sidebar">
+    <div class="d-icon win-open" id="di-player" onclick="showWin('player-win','tb-player')" title="player">
+      <span class="d-icon-img">🎵</span>
+      <span class="d-icon-label">player</span>
+      <span class="d-icon-dot"></span>
+    </div>
+    <div class="d-icon win-open" id="di-bio" onclick="showWin('bio-win','tb-bio')">
+      <span class="d-icon-img">👤</span>
+      <span class="d-icon-label">bio</span>
+      <span class="d-icon-dot"></span>
+    </div>
+    <div class="d-icon win-open" id="di-playlist" onclick="showWin('playlist-win','tb-playlist')">
+      <span class="d-icon-img">🎶</span>
+      <span class="d-icon-label">playlist</span>
+      <span class="d-icon-dot"></span>
+    </div>
+    <div class="d-icon win-open" id="di-library" onclick="showWin('library-win','tb-library')">
+      <span class="d-icon-img">📚</span>
+      <span class="d-icon-label">folders</span>
+      <span class="d-icon-dot"></span>
+    </div>
+    <div class="d-icon win-open" id="di-vibe" onclick="showWin('vibe-win','tb-vibe')">
+      <span class="d-icon-img">📀</span>
+      <span class="d-icon-label">meta</span>
+      <span class="d-icon-dot"></span>
+    </div>
+    <div class="d-icon win-open" id="di-settings" onclick="showWin('settings-win','tb-settings')">
+      <span class="d-icon-img">⚙</span>
+      <span class="d-icon-label">settings</span>
+      <span class="d-icon-dot"></span>
+    </div>
+  </div>
+
+  <!-- DOCK -->
+  <div class="dock" id="dock">
+    <div class="dock-item dock-open" id="dock-player" onclick="showWin('player-win','tb-player')">
+      <div class="dock-icon">🎵</div>
+      <div class="dock-dot"></div>
+      <div class="dock-tooltip" data-i18n="dockPlayer"></div>
+    </div>
+    <div class="dock-item dock-open" id="dock-playlist" onclick="showWin('playlist-win','tb-playlist')">
+      <div class="dock-icon">🎶</div>
+      <div class="dock-dot"></div>
+      <div class="dock-tooltip" data-i18n="dockPlaylist"></div>
+    </div>
+    <div class="dock-item dock-open" id="dock-bio" onclick="showWin('bio-win','tb-bio')">
+      <div class="dock-icon">👤</div>
+      <div class="dock-dot"></div>
+      <div class="dock-tooltip" data-i18n="dockBio"></div>
+    </div>
+    <div class="dock-item dock-open" id="dock-library" onclick="showWin('library-win','tb-library')">
+      <div class="dock-icon">📚</div>
+      <div class="dock-dot"></div>
+      <div class="dock-tooltip" data-i18n="dockLibrary"></div>
+    </div>
+    <div class="dock-item dock-open" id="dock-settings" onclick="showWin('settings-win','tb-settings')">
+      <div class="dock-icon">⚙</div>
+      <div class="dock-dot"></div>
+      <div class="dock-tooltip" data-i18n="dockSettings"></div>
+    </div>
+    <div class="dock-sep"></div>
+    <div class="dock-item dock-open" id="dock-vibe" onclick="showWin('vibe-win','tb-vibe')">
+      <div class="dock-icon">📀</div>
+      <div class="dock-dot"></div>
+      <div class="dock-tooltip" data-i18n="dockMeta"></div>
+    </div>
+  </div>
+
+  <div class="desktop">
+    <div id="desktop-grid-overlay" class="desktop-grid-overlay" aria-hidden="true"></div>
+    <div class="desktop-grid-stage" id="desktop-grid-stage">
+    <div class="windows-grid">
+
+      <div class="left-col">
+
+        <div class="window" id="player-win">
+          <div class="win-titlebar">
+            <div class="win-controls">
+              <button type="button" class="win-btn close" onclick="toggleWin('player-win')" aria-label="close"></button>
+              <button type="button" class="win-btn minimize" onclick="minimizeWin('player-win')"></button>
+              <button type="button" class="win-btn expand" onclick="expandWin('player-win')"></button>
+            </div>
+            <span class="win-title" data-i18n="winPlayer"></span>
+            <span style="font-size:12px">▶</span>
+          </div>
+          <div class="win-body">
+            <div class="player-art">
+              <img id="track-cover" class="player-art-cover" alt="cover" />
+              <div class="player-art-vinyl" id="vinyl"></div>
+            </div>
+            <div class="track-info">
+              <div class="track-name" id="track-name"></div>
+              <div class="track-artist" id="track-artist"></div>
+              <div class="track-file" id="track-file"></div>
+            </div>
+            <div class="progress-wrap">
+              <div class="progress-times">
+                <span id="cur-time">0:00</span>
+                <span id="dur-time">0:00</span>
+              </div>
+              <div class="progress-bar" id="progress-bar" onclick="seekAudio(event)">
+                <div class="progress-fill" id="progress-fill"></div>
+              </div>
+            </div>
+            <div class="controls">
+              <button type="button" class="ctrl-btn" id="shuffle-ctrl" onclick="toggleShuffle()" title="shuffle">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor"
+                  stroke-width="2">
+                  <path d="M16 3h5v5M4 20 21 3M21 16v5h-5M15 15l6 6M4 4l5 5" />
+                </svg>
+              </button>
+              <button type="button" class="ctrl-btn" onclick="prevTrack()">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                  <polygon points="19 20 9 12 19 4 19 20" />
+                  <line x1="5" y1="19" x2="5" y2="5" />
+                </svg>
+              </button>
+              <button type="button" class="ctrl-btn play-btn" id="play-btn" onclick="togglePlay()">
+                <svg id="play-icon" viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+                  <polygon points="5 3 19 12 5 21 5 3" />
+                </svg>
+              </button>
+              <button type="button" class="ctrl-btn" onclick="nextTrack()">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                  <polygon points="5 4 15 12 5 20 5 4" />
+                  <line x1="19" y1="5" x2="19" y2="19" />
+                </svg>
+              </button>
+              <button type="button" class="ctrl-btn" id="loop-ctrl" onclick="toggleLoop()" title="loop">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="17 1 21 5 17 9" />
+                  <path d="M3 11V9a4 4 0 0 1 4-4h14" />
+                  <polyline points="7 23 3 19 7 15" />
+                  <path d="M21 13v2a4 4 0 0 1-4 4H3" />
+                </svg>
+              </button>
+            </div>
+            <div class="volume-row">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
+              </svg>
+              <input type="range" class="vol" id="vol" min="0" max="100" value="70" oninput="setVol(this.value)">
+              <span style="font-family:'VT323',monospace;font-size:14px;color:var(--text-muted)" id="vol-val">70</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="window" id="library-win">
+          <div class="win-titlebar">
+            <div class="win-controls">
+              <button type="button" class="win-btn close" onclick="toggleWin('library-win')"></button>
+              <button type="button" class="win-btn minimize" onclick="minimizeWin('library-win')"></button>
+              <button type="button" class="win-btn expand" onclick="expandWin('library-win')"></button>
+            </div>
+            <span class="win-title" data-i18n="winLibrary"></span>
+          </div>
+          <div class="win-body">
+            <div class="file-explorer">
+              <div class="file-path" id="library-active-path">~/music/</div>
+              <div class="settings-row" style="margin-bottom:8px;">
+                <button type="button" class="shuffle-btn" style="margin-top:0;" onclick="pickMusicFolder()"
+                  data-i18n="libraryImportFolder"></button>
+              </div>
+              <div class="folder-list"></div>
+              <div class="file-add-info" data-i18n="libraryHint"></div>
+              <pre class="folder-tracks-preview" id="library-preview"></pre>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="right-col">
+
+        <div class="window" id="bio-win">
+          <div class="win-titlebar">
+            <div class="win-controls">
+              <button type="button" class="win-btn close" onclick="toggleWin('bio-win')"></button>
+              <button type="button" class="win-btn minimize" onclick="minimizeWin('bio-win')"></button>
+              <button type="button" class="win-btn expand" onclick="expandWin('bio-win')"></button>
+            </div>
+            <span class="win-title" data-i18n="winBio"></span>
+          </div>
+          <div class="win-body">
+
+            <div class="bio-profiles">
+              <div class="bio-profile-card">
+                <div class="bio-header">
+                  <div class="bio-avatar"><img src="img/thumbnail.player/pose_1.png" alt="Profile 1" class="bio-avatar-img"></div>
+                  <div>
+                    <div class="bio-name">Your Name</div>
+                    <div class="bio-handle">@username</div>
+                    <div class="bio-tags">
+                      <span class="bio-tag">lo-fi</span>
+                      <span class="bio-tag">dev</span>
+                      <span class="bio-tag">music</span>
+                    </div>
+                  </div>
+                </div>
+                <p class="bio-desc">Hi! I love lo-fi, late-night coding, and coffee. This site is my tiny digital space.</p>
+                <div class="bio-links">
+                  <a class="bio-link" href="https://github.com" target="_blank" rel="noopener">⬡ github</a>
+                  <a class="bio-link" href="https://twitter.com" target="_blank" rel="noopener">⬡ twitter</a>
+                </div>
+              </div>
+              <div class="bio-profile-card">
+                <div class="bio-header">
+                  <div class="bio-avatar"><img src="img/poyo.pet/open_e.png" alt="Profile 2" class="bio-avatar-img"></div>
+                  <div>
+                    <div class="bio-name">Second Name</div>
+                    <div class="bio-handle">@second</div>
+                    <div class="bio-tags">
+                      <span class="bio-tag">art</span>
+                      <span class="bio-tag">furry</span>
+                      <span class="bio-tag">🌙</span>
+                    </div>
+                  </div>
+                </div>
+                <p class="bio-desc">Creative partner profile — tags, links, and bio are independent per card.</p>
+                <div class="bio-links">
+                  <a class="bio-link" href="https://instagram.com" target="_blank" rel="noopener">⬡ insta</a>
+                  <span class="bio-link" onclick="sendMsg()">⬡ contact</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="window" id="playlist-win">
+          <div class="win-titlebar">
+            <div class="win-controls">
+              <button type="button" class="win-btn close" onclick="toggleWin('playlist-win')"></button>
+              <button type="button" class="win-btn minimize" onclick="minimizeWin('playlist-win')"></button>
+              <button type="button" class="win-btn expand" onclick="expandWin('playlist-win')"></button>
+            </div>
+            <span class="win-title" data-i18n="winPlaylist"></span>
+          </div>
+          <div class="win-body win-body-pad">
+            <ul class="playlist-list" id="playlist-list"></ul>
+            <button type="button" class="shuffle-btn" id="shuffle-list-btn" onclick="shufflePlaylist()"
+              data-i18n="playlistShuffle"></button>
+          </div>
+        </div>
+
+        <div class="window" id="vibe-win">
+          <div class="win-titlebar">
+            <div class="win-controls">
+              <button type="button" class="win-btn close" onclick="toggleWin('vibe-win')"></button>
+              <button type="button" class="win-btn minimize" onclick="minimizeWin('vibe-win')"></button>
+              <button type="button" class="win-btn expand" onclick="expandWin('vibe-win')"></button>
+            </div>
+            <span class="win-title" data-i18n="winMeta"></span>
+          </div>
+          <div class="win-body">
+            <div class="meta-eq-mini" id="meta-eq"></div>
+            <div class="meta-grid">
+              <div class="meta-row"><span class="mk" data-i18n="metaTitle"></span><span class="mv" id="meta-title">—</span>
+              </div>
+              <div class="meta-row"><span class="mk" data-i18n="metaArtist"></span><span class="mv"
+                  id="meta-artist">—</span></div>
+              <div class="meta-row"><span class="mk" data-i18n="metaFile"></span><span class="mv" id="meta-file">—</span>
+              </div>
+              <div class="meta-row"><span class="mk" data-i18n="metaDuration"></span><span class="mv"
+                  id="meta-duration">0:00</span></div>
+              <div class="meta-row"><span class="mk" data-i18n="metaFormat"></span><span class="mv"
+                  id="meta-format">—</span></div>
+              <div class="meta-row"><span class="mk" data-i18n="metaEmoji"></span><span class="mv" id="meta-emoji">—</span>
+              </div>
+              <div class="meta-row"><span class="mk" data-i18n="metaPlaylistFolder"></span><span class="mv"
+                  id="meta-folder">—</span></div>
+              <div class="meta-row"><span class="mk" data-i18n="metaSoundcloud"></span><span class="mv"
+                  id="meta-soundcloud">—</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="window" id="settings-win">
+          <div class="win-titlebar">
+            <div class="win-controls">
+              <button type="button" class="win-btn close" onclick="toggleWin('settings-win')"></button>
+              <button type="button" class="win-btn minimize" onclick="minimizeWin('settings-win')"></button>
+              <button type="button" class="win-btn expand" onclick="expandWin('settings-win')"></button>
+            </div>
+            <span class="win-title" data-i18n="winSettings"></span>
+          </div>
+          <div class="win-body">
+            <div class="settings-group">
+              <h4 data-i18n="settingsLang"></h4>
+              <div class="settings-row">
+                <select id="setting-lang">
+                  <option value="uk">Українська</option>
+                  <option value="en">English</option>
+                  <option value="cs">Čeština</option>
+                  <option value="de">Deutsch</option>
+                  <option value="es">Español</option>
+                  <option value="zh">中文</option>
+                </select>
+              </div>
+              <div class="settings-row">
+                <h4 style="margin:0;margin-top:6px;" data-i18n="settingsDevice"></h4>
+                <select id="setting-device">
+                  <option value="auto" data-i18n="settingsDeviceAuto"></option>
+                  <option value="pc" data-i18n="settingsDevicePc"></option>
+                  <option value="tablet" data-i18n="settingsDeviceTablet"></option>
+                  <option value="phone" data-i18n="settingsDevicePhone"></option>
+                </select>
+              </div>
+              <div class="settings-row">
+                <button type="button" class="shuffle-btn" style="margin-top:0;" onclick="resetWindowLayout()"
+                  data-i18n="settingsResetLayout"></button>
+              </div>
+              <div class="small-hint" data-i18n="settingsThemeNote"></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    </div>
+  </div>
+
+  <div class="window" id="paint-win" style="display:none;position:fixed;top:140px;right:16px;width:min(720px,calc(100vw - 32px));z-index:800">
+    <div class="win-titlebar">
+      <div class="win-controls">
+        <button type="button" class="win-btn close" onclick="toggleWin('paint-win')"></button>
+        <button type="button" class="win-btn minimize" onclick="minimizeWin('paint-win')"></button>
+        <button type="button" class="win-btn expand" onclick="expandWin('paint-win')"></button>
+      </div>
+      <span class="win-title">🎨 paint.layers</span>
+    </div>
+    <div class="win-body paint-wrap">
+      <div class="paint-toolbar">
+        <button type="button" id="paint-brush-tool" onclick="paintPickTool('brush')"><span
+            id="paint-brush-label"></span></button>
+        <button type="button" id="paint-erase-tool" onclick="paintPickTool('erase')"><span
+            id="paint-erase-label"></span></button>
+        <button type="button" id="paint-clear-btn" onclick="paintClearActive()"></button>
+        <button type="button" id="paint-add-layer" onclick="paintAddLayer()"></button>
+        <button type="button" class="tb-win-btn" onclick="paintMergeAll()" data-i18n="paintMerge"></button>
+        <button type="button" class="tb-win-btn" onclick="paintExportPng()" data-i18n="paintExport"></button>
+        <label style="display:flex;align-items:center;gap:4px;"><span id="paint-color-label"></span><input
+            type="color" id="paint-color-input" value="#FFD600" onchange="paintColorInput(this)" /></label>
+        <label style="display:flex;align-items:center;gap:6px;"><span id="paint-size-label"></span><input id="paint-size"
+            type="range" min="1" max="24" step="1" value="4" oninput="paintPickSize(this.value)" /></label>
+      </div>
+      <div class="paint-swatches" id="paint-swatches"></div>
+      <div class="paint-layers-col" id="paint-layers"></div>
+      <div id="paint-stack" class="paint-canvas-box"></div>
+    </div>
+  </div>
+
+  <div class="window" id="calc-win"
+    style="display:none;position:fixed;top:180px;right:16px;width:280px;z-index:800">
+    <div class="win-titlebar">
+      <div class="win-controls">
+        <button type="button" class="win-btn close" onclick="toggleWin('calc-win')"></button>
+        <button type="button" class="win-btn minimize" onclick="minimizeWin('calc-win')"></button>
+        <button type="button" class="win-btn expand" onclick="expandWin('calc-win')"></button>
+      </div>
+      <span class="win-title">🔢 calculator</span>
+    </div>
+    <div class="win-body">
+      <div class="calc-shell">
+        <div class="calc-display" id="calc-display">0</div>
+        <div class="calc-grid">
+          <button type="button" class="calc-btn" onclick="calcTap('C')">C</button>
+          <button type="button" class="calc-btn" onclick="calcTap('(')">(</button>
+          <button type="button" class="calc-btn" onclick="calcTap(')')">)</button>
+          <button type="button" class="calc-btn op" onclick="calcTap('/')">/</button>
+          <button type="button" class="calc-btn" onclick="calcTap('7')">7</button>
+          <button type="button" class="calc-btn" onclick="calcTap('8')">8</button>
+          <button type="button" class="calc-btn" onclick="calcTap('9')">9</button>
+          <button type="button" class="calc-btn op" onclick="calcTap('*')">×</button>
+          <button type="button" class="calc-btn" onclick="calcTap('4')">4</button>
+          <button type="button" class="calc-btn" onclick="calcTap('5')">5</button>
+          <button type="button" class="calc-btn" onclick="calcTap('6')">6</button>
+          <button type="button" class="calc-btn op" onclick="calcTap('-')">−</button>
+          <button type="button" class="calc-btn" onclick="calcTap('1')">1</button>
+          <button type="button" class="calc-btn" onclick="calcTap('2')">2</button>
+          <button type="button" class="calc-btn" onclick="calcTap('3')">3</button>
+          <button type="button" class="calc-btn op" onclick="calcTap('+')">+</button>
+          <button type="button" class="calc-btn" onclick="calcTap('⌫')">⌫</button>
+          <button type="button" class="calc-btn" onclick="calcTap('0')">0</button>
+          <button type="button" class="calc-btn" onclick="calcTap('.')">.</button>
+          <button type="button" class="calc-btn op" onclick="calcTap('=')">=</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="window" id="calendar-win"
+    style="display:none;position:fixed;top:120px;right:16px;width:min(360px,calc(100vw - 32px));z-index:800">
+    <div class="win-titlebar">
+      <div class="win-controls">
+        <button type="button" class="win-btn close" onclick="toggleWin('calendar-win')"></button>
+        <button type="button" class="win-btn minimize" onclick="minimizeWin('calendar-win')"></button>
+        <button type="button" class="win-btn expand" onclick="expandWin('calendar-win')"></button>
+      </div>
+      <span class="win-title">📅 calendar</span>
+    </div>
+    <div class="win-body">
+      <div class="cal-shell">
+        <div class="cal-header">
+          <button type="button" onclick="calPrev()" data-i18n="calPrev"></button>
+          <div id="calendar-title"></div>
+          <button type="button" onclick="calNext()" data-i18n="calNext"></button>
+        </div>
+        <div id="calendar-grid" class="cal-grid"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="window" id="autoclick-win"
+    style="display:none;position:fixed;top:220px;right:16px;width:min(360px,calc(100vw - 32px));z-index:800">
+    <div class="win-titlebar">
+      <div class="win-controls">
+        <button type="button" class="win-btn close" onclick="toggleWin('autoclick-win')"></button>
+        <button type="button" class="win-btn minimize" onclick="minimizeWin('autoclick-win')"></button>
+        <button type="button" class="win-btn expand" onclick="expandWin('autoclick-win')"></button>
+      </div>
+      <span class="win-title">🧀 clicker.game</span>
+    </div>
+    <div class="win-body">
+      <div class="ac-shell">
+        <div class="ac-row"><span id="ac-status" class="ac-badge on">READY</span><span id="ac-count">0</span></div>
+        <div class="ac-row">
+          <button type="button" id="ac-target-btn" class="calc-btn" onclick="clickerTap()" data-i18n="acTarget"></button>
+          <button type="button" class="bio-link" onclick="clickerReset()" data-i18n="acReset"></button>
+        </div>
+        <div class="small-hint" data-i18n="acHint"></div>
+      </div>
+    </div>
+  </div>
+
+  <script defer src="./js/os-theme.js"></script>
+  <script defer src="./js/i18n.js"></script>
+  <script defer src="./js/config.js"></script>
+  <script defer src="./js/soundcloud-player.js"></script>
+  <script defer src="./js/window-grid.js"></script>
+  <script defer src="./js/app.js"></script>
+</body>
+
+</html>

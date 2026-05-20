@@ -1,0 +1,46 @@
+{
+  "generatedAt": "2026-05-11T10:13:41.375Z",
+  "playlists": [
+    {
+      "folder": "music/dreamcore/",
+      "tracks": [
+        {
+          "file": "music/dreamcore/C418 - Minecraft - Minecraft Volume Alpha.m4a",
+          "name": "C418   Minecraft   Minecraft Volume Alpha",
+          "artist": "Dreamcore",
+          "emoji": "🎵"
+        },
+        {
+          "file": "music/dreamcore/C418 - Minecraft - Minecraft Volume Alpha.mp3",
+          "name": "C418   Minecraft   Minecraft Volume Alpha",
+          "artist": "Dreamcore",
+          "emoji": "🎵"
+        },
+        {
+          "file": "music/dreamcore/Fallen Down.m4a",
+          "name": "Fallen Down",
+          "artist": "Dreamcore",
+          "emoji": "🎵"
+        },
+        {
+          "file": "music/dreamcore/Fallen Down.mp3",
+          "name": "Fallen Down",
+          "artist": "Dreamcore",
+          "emoji": "🎵"
+        },
+        {
+          "file": "music/dreamcore/Mice on Venus.m4a",
+          "name": "Mice on Venus",
+          "artist": "Dreamcore",
+          "emoji": "🎵"
+        },
+        {
+          "file": "music/dreamcore/Mice on Venus.mp3",
+          "name": "Mice on Venus",
+          "artist": "Dreamcore",
+          "emoji": "🎵"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>e621 Tag Extractor — lofi.os</title>
+    <meta property="og:title" content="e621 Tag Extractor — lofi.os">
+    <meta property="og:description" content="Enter an e621 post URL and get clean tags + character prompt for Stable Diffusion.">
+    <meta property="og:image" content="https://vadigr123.github.io/pages/Metadata/assets/good.png">
+    <meta property="og:url" content="https://vadigr123.github.io/pages/e621/">
+    <meta property="og:type" content="website">
+    <meta name="theme-color" content="#FFD600">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=VT323&family=Space+Mono:wght@400;700&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../css/os-shared.css">
+    <link rel="stylesheet" href="../../css/e621-page.css">
+</head>
+<body class="lofi-os-page">
+<div class="os-taskbar">
+  <a class="os-taskbar-logo" href="https://vadigr123.github.io/">~/lofi.os</a>
+  <span class="os-taskbar-sep">|</span>
+  <span class="os-taskbar-title">e621.tags</span>
+  <nav class="os-taskbar-nav" aria-label="Site pages">
+    <a class="os-nav-link" href="https://vadigr123.github.io/">[~/pages]</a>
+    <a class="os-nav-link active" href="https://vadigr123.github.io/pages/e621/">[e621/]</a>
+    <a class="os-nav-link" href="https://vadigr123.github.io/pages/Metadata/">[metadata/]</a>
+    <a class="os-nav-link" href="https://vadigr123.github.io/pages/ideas-board/">[ideas/]</a>
+  </nav>
+  <span class="os-taskbar-spacer"></span>
+  <div class="os-theme-btns">
+    <div class="os-theme-btn dark active" title="dark" onclick="OsTheme.set('dark',this)"></div>
+    <div class="os-theme-btn white" title="light" onclick="OsTheme.set('white',this)"></div>
+  </div>
+</div>
+<script defer src="../../js/os-theme.js"></script>
+<div class="e621-page">
+<button type="button" onclick="openSettings()" class="e621-settings-btn os-btn" title="Filter Settings"><i class="fas fa-cog"></i></button>
+<div class="window" id="extractor-win">
+  <div class="win-titlebar">
+    <div class="win-controls">
+      <span class="win-btn close"></span>
+      <span class="win-btn minimize"></span>
+      <span class="win-btn expand"></span>
+    </div>
+    <span class="win-title">e621.tags</span>
+  </div>
+  <div class="win-body">
+    <div class="e621-intro">
+      <h1><i class="fas fa-paw"></i> General Tag Extractor</h1>
+      <p>Enter e621 URL → Get Clean Tags + Character Prompt.</p>
+    </div>
+    <div class="e621-input-row">
+      <div class="e621-input-wrap">
+        <input type="text" id="urlInput" placeholder="https://e621.net/posts/(ID)">
+      </div>
+      <button type="button" onclick="fetchTags()" class="os-btn os-btn-primary"><i class="fas fa-search"></i> Extract</button>
+    </div>
+    <div id="errorMessage" class="e621-error"><i class="fas fa-exclamation-circle"></i> <span id="errorText">An error occurred.</span></div>
+    <div id="loadingSpinner" class="e621-loading"><i class="fas fa-circle-notch fa-spin"></i></div>
+  </div>
+</div>
+
+<div id="resultsArea" class="e621-results">
+<div class="window" id="results-win">
+  <div class="win-titlebar">
+    <div class="win-controls">
+      <span class="win-btn close"></span>
+      <span class="win-btn minimize"></span>
+      <span class="win-btn expand"></span>
+    </div>
+    <span class="win-title">results.tags</span>
+  </div>
+  <div class="win-body">
+    <div class="e621-results-grid">
+      <div>
+        <div class="e621-preview-box">
+          <img id="postImage" src="" alt="Post Preview" class="hidden">
+          <div id="imagePlaceholder" class="e621-preview-placeholder">Image Preview</div>
+        </div>
+        <div class="e621-post-id">Post ID: <span id="postIdDisplay">---</span></div>
+        <div id="characterInfoCard" class="e621-char-card">
+          <h3>Selected Character</h3>
+          <div id="charImagePreview" class="e621-char-preview"></div>
+          <p id="charNameDisplay" class="e621-char-name">---</p>
+          <button type="button" id="charRefButton" onclick="openCharacterReference()" class="os-btn os-btn-primary hidden"><i class="fas fa-book"></i> Reference</button>
+        </div>
+      </div>
+      <div>
+        <div class="e621-tag-count">Total clean tags: <strong id="tagCount">0</strong></div>
+        <div class="e621-preset-box">
+          <div class="e621-preset-head">
+            <label>Character Preset (<span id="modeIndicator" class="mode">Solo</span>)</label>
+            <button type="button" onclick="openCharManager()" class="e621-manage-link"><i class="fas fa-users-cog"></i> Manage</button>
+          </div>
+          <select id="characterSelect" onchange="updateCharacterDisplay()"></select>
+          <p id="duoMessage" class="e621-duo-msg"><i class="fas fa-info-circle"></i> Duo mode active.</p>
+        </div>
+        <div class="e621-actions">
+          <button type="button" onclick="copyAllTags()" class="os-btn os-btn-primary"><i class="fas fa-copy"></i> Copy Full Prompt</button>
+          <button type="button" onclick="deleteSelectedTags()" id="deleteSelectedBtn" class="os-btn os-btn-danger hidden"><i class="fas fa-trash"></i> Delete Selected</button>
+          <button type="button" onclick="clearResults()" class="os-btn"><i class="fas fa-trash"></i></button>
+        </div>
+        <div id="tagsContainer" class="e621-tags-box"></div>
+        <p class="e621-tags-hint">Click a tag to copy.</p>
+      </div>
+    </div>
+  </div>
+</div>
+<p class="e621-footer-note">Powered by the public e621 API.</p>
+</div>
+
+</div>
+
+<div id="settingsModal" class="e621-modal-backdrop">
+  <div class="e621-modal">
+    <div class="e621-modal-head"><h2><i class="fas fa-cog"></i> Filter Settings</h2><button type="button" class="e621-modal-close" onclick="closeSettings()">&times;</button></div>
+    <div class="e621-modal-body">
+      <label>Tag Categories</label>
+      <div class="e621-check-row"><input type="checkbox" id="catGeneral" checked> General</div>
+      <div class="e621-check-row"><input type="checkbox" id="catArtists" checked> Artists</div>
+      <div class="e621-check-row"><input type="checkbox" id="catSpecies" checked> Species</div>
+      <div class="e621-check-row"><input type="checkbox" id="catMeta" checked> Meta</div>
+      <label>Blacklist (comma-separated)</label>
+      <textarea id="blacklistInput" rows="6"></textarea>
+      <button type="button" onclick="resetDefaultBlacklist()" class="e621-manage-link">Reset blacklist</button>
+      <label>.mikus import/export</label>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+        <div id="mikusDropzone" class="e621-dropzone"><div id="mikusDropText">Drop .mikus</div><div id="mikusFileName"></div></div>
+        <input type="file" id="importMikusFile" accept=".mikus,.zip" class="hidden" />
+        <button type="button" onclick="handleImportMikus()" class="os-btn">Import</button>
+        <button type="button" onclick="exportMikus()" class="os-btn os-btn-primary">Export</button>
+      </div>
+    </div>
+    <div class="e621-modal-foot">
+      <button type="button" onclick="closeSettings()" class="os-btn">Cancel</button>
+      <button type="button" onclick="saveSettings()" class="os-btn os-btn-primary">Save</button>
+    </div>
+  </div>
+</div>
+
+<div id="charModal" class="e621-modal-backdrop">
+  <div class="e621-modal wide">
+    <div class="e621-modal-head"><h2><i class="fas fa-users"></i> Characters</h2><button type="button" class="e621-modal-close" onclick="closeCharManager()">&times;</button></div>
+    <div class="e621-modal-body">
+      <div id="charFormContainer" class="e621-char-form">
+        <h3 id="formTitle">Add Character</h3>
+        <div class="e621-form-grid"><div class="grow e621-form-field"><label>Name</label><input type="text" id="newCharName"></div>
+        <div class="narrow e621-form-field"><label>Type</label><select id="newCharType"><option value="solo">Solo</option><option value="duo">Duo</option></select></div></div>
+        <div class="e621-form-field"><label>Reference URL</label><input type="url" id="newCharUrl"></div>
+        <div class="e621-form-field"><label>Image URL</label><input type="text" id="newCharImgUrl"></div>
+        <div id="newCharDropzone" class="e621-dropzone"><div id="newCharDropText">Drop image</div><div id="newCharFileName"></div></div>
+        <input type="file" id="newCharFile" accept="image/*" class="hidden" />
+        <div id="formImgPreview" class="e621-img-preview"><img src="" alt="Preview"></div>
+        <div class="e621-form-field"><label>Prompt</label><textarea id="newCharTags"></textarea></div>
+        <div class="e621-form-actions"><button type="button" id="saveCharBtn" onclick="saveCharacter()" class="os-btn os-btn-primary grow">Save</button>
+        <button type="button" id="cancelEditBtn" onclick="cancelEdit()" class="os-btn hidden">Cancel</button></div>
+      </div>
+      <h3>Saved</h3><div id="customCharList"></div>
+      <button type="button" onclick="resetCharactersToDefault()" class="e621-manage-link">Reset all</button>
+    </div>
+    <div class="e621-modal-foot"><button type="button" onclick="closeCharManager()" class="os-btn">Close</button></div>
+  </div>
+</div>
+
+<div id="toast" class="e621-toast"><span id="toastMsg">Copied!</span></div>
+<div id="imageZoomModal" class="image-zoom-modal" onclick="closeImageZoom(event)">
+  <button type="button" class="image-zoom-close" onclick="closeImageZoom()">&times;</button>
+  <img id="zoomImage" src="" alt="Zoomed">
+</div>
+
+<script defer src="../../js/e621-app.js"></script>
+</body>
+</html>

@@ -1,0 +1,535 @@
+/* ========== Extensions: settings, tablets/phones, app switcher, extra apps ========== */
+:root {
+  --accent-ink: var(--accent);
+}
+
+[data-theme="white"] {
+  --accent-ink: #000000;
+}
+
+body.no-os-cursor {
+  cursor: auto;
+}
+
+.hidden-menu-wrap {
+  position: relative;
+  z-index: 1100;
+}
+
+.hidden-apps-btn {
+  font-family: inherit;
+  font-size: 13px;
+  padding: 2px 8px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: var(--bg2);
+  color: var(--accent-ink);
+  cursor: pointer;
+}
+
+.hidden-apps-btn:hover {
+  border-color: var(--accent);
+}
+
+.hidden-dropdown {
+  display: none;
+  position: absolute;
+  left: 0;
+  top: 100%;
+  margin-top: 6px;
+  min-width: 216px;
+  background: var(--win-bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
+  padding: 6px;
+}
+
+.hidden-dropdown.open {
+  display: block;
+}
+
+.hidden-item {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  padding: 8px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-family: "VT323", monospace;
+  font-size: 15px;
+  color: var(--text-muted);
+}
+
+.hidden-item:hover {
+  background: var(--bg3);
+  color: var(--accent-ink);
+}
+
+.tb-apps {
+  margin-left: 6px !important;
+  font-size: 12px !important;
+  padding: 2px 6px !important;
+}
+
+.settings-group {
+  margin-bottom: 1rem;
+}
+
+.settings-group h4 {
+  font-family: "VT323", monospace;
+  font-size: 15px;
+  color: var(--accent-ink);
+  margin-bottom: 8px;
+}
+
+.settings-row {
+  margin-bottom: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.settings-row label {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.settings-row select,
+.settings-row input[type="text"] {
+  font-family: "Space Mono", monospace;
+  font-size: 12px;
+  padding: 6px 8px;
+  border-radius: 4px;
+  border: 1px solid var(--border);
+  background: var(--bg3);
+  color: var(--text);
+  max-width: 100%;
+}
+
+.small-hint {
+  font-size: 10px;
+  color: var(--text-muted);
+  line-height: 1.4;
+  margin-top: 4px;
+}
+
+.folder-list .file-item.folder.active {
+  background: rgba(255, 214, 0, 0.1);
+  border-left: 2px solid var(--accent);
+  padding-left: 8px;
+}
+
+.folder-tracks-preview {
+  max-height: 140px;
+  overflow-y: auto;
+  margin-top: 8px;
+  padding: 6px;
+  border-radius: 4px;
+  border: 1px dashed var(--border);
+  font-family: "VT323", monospace;
+  font-size: 14px;
+  color: var(--text-muted);
+}
+
+.meta-grid {
+  display: grid;
+  gap: 8px;
+}
+
+.meta-row {
+  display: grid;
+  grid-template-columns: 118px 1fr;
+  gap: 8px;
+  font-size: 12px;
+  align-items: baseline;
+}
+
+.meta-row .mk {
+  font-family: "VT323", monospace;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.meta-row .mv {
+  font-family: "Space Mono", monospace;
+  color: var(--text);
+  word-break: break-word;
+}
+
+.meta-eq-mini {
+  display: flex;
+  align-items: flex-end;
+  gap: 2px;
+  height: 36px;
+  margin-bottom: 0.75rem;
+}
+
+.paint-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.paint-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+}
+
+.paint-toolbar button,
+.paint-toolbar select {
+  font-family: "VT323", monospace;
+  font-size: 14px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  border: 1px solid var(--border);
+  background: var(--bg3);
+  color: var(--text);
+  cursor: pointer;
+}
+
+.paint-toolbar button:hover {
+  border-color: var(--accent);
+  color: var(--accent-ink);
+}
+
+.paint-toolbar button.pick {
+  border-color: var(--accent);
+  color: var(--accent-ink);
+  box-shadow: 0 0 8px rgba(255, 214, 0, 0.2);
+}
+
+.paint-layers-col {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-height: 180px;
+  overflow-y: auto;
+}
+
+.paint-layer-row {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  padding: 4px;
+  border-radius: 4px;
+  border: 1px solid var(--border);
+  cursor: grab;
+  font-family: "VT323", monospace;
+  font-size: 13px;
+}
+
+.paint-layer-row.active {
+  border-color: var(--accent);
+  background: rgba(255, 214, 0, 0.06);
+}
+
+.paint-layer-row input[type="checkbox"] {
+  accent-color: var(--accent-ink);
+}
+
+.paint-canvas-box {
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  overflow: auto;
+  background: #111;
+  touch-action: none;
+}
+
+.paint-canvas-box canvas {
+  display: block;
+}
+
+.paint-swatches {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.swatch {
+  width: 22px;
+  height: 22px;
+  border-radius: 4px;
+  border: 2px solid var(--border);
+  cursor: pointer;
+}
+
+.swatch.pick {
+  outline: 2px solid var(--accent);
+}
+
+.calc-shell {
+  font-family: "VT323", monospace;
+}
+
+.calc-display {
+  width: 100%;
+  text-align: right;
+  font-size: 28px;
+  padding: 10px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  margin-bottom: 10px;
+}
+
+.calc-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+}
+
+.calc-btn {
+  font-size: 18px;
+  padding: 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--bg2);
+  color: var(--text);
+  cursor: pointer;
+}
+
+.calc-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent-ink);
+}
+
+.calc-btn.op {
+  background: rgba(255, 214, 0, 0.08);
+}
+
+.cal-shell {
+  font-family: "VT323", monospace;
+}
+
+.cal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.cal-header button {
+  font-family: inherit;
+  font-size: 16px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: var(--bg3);
+  color: var(--accent-ink);
+  cursor: pointer;
+  padding: 4px 10px;
+}
+
+.cal-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+  text-align: center;
+  font-size: 13px;
+}
+
+.cal-dow {
+  color: var(--text-muted);
+  padding: 4px 0;
+}
+
+.cal-cell {
+  padding: 8px 0;
+  border-radius: 4px;
+  cursor: pointer;
+  border: 1px solid transparent;
+}
+
+.cal-cell:hover {
+  border-color: var(--border);
+}
+
+.cal-cell.muted {
+  color: var(--border);
+}
+
+.cal-cell.today {
+  border-color: var(--accent);
+  color: var(--accent-ink);
+}
+
+.ac-shell {
+  font-family: "VT323", monospace;
+}
+
+.ac-row {
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.ac-badge {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 4px;
+  border: 1px solid var(--border);
+  font-size: 15px;
+}
+
+.ac-badge.on {
+  border-color: var(--accent);
+  color: var(--accent-ink);
+}
+
+.app-switch-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  z-index: 4000;
+  display: none;
+}
+
+.app-switch-backdrop.open {
+  display: block;
+}
+
+.app-switch-sheet {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  max-height: 72vh;
+  background: var(--win-bg);
+  border: 1px solid var(--border);
+  border-radius: 0 0 16px 16px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+  padding: 10px;
+  transform: translateY(-100%);
+  transition: transform 0.22s ease;
+}
+
+.app-switch-backdrop.open .app-switch-sheet {
+  transform: translateY(0);
+}
+
+.pull-bar {
+  width: 42px;
+  height: 5px;
+  background: var(--border);
+  border-radius: 4px;
+  margin: 4px auto 10px;
+}
+
+.switch-title {
+  font-family: "VT323", monospace;
+  font-size: 16px;
+  color: var(--accent-ink);
+  margin-bottom: 8px;
+}
+
+.switch-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 52vh;
+  overflow-y: auto;
+}
+
+.switch-card {
+  min-height: 56px;
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--bg2);
+  font-family: "VT323", monospace;
+  font-size: 14px;
+  touch-action: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.switch-card.dragging {
+  opacity: 0.75;
+}
+
+.swipe-hint {
+  position: fixed;
+  top: 34px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 10px;
+  color: var(--text-muted);
+  z-index: 250;
+  font-family: "VT323", monospace;
+  display: none;
+  pointer-events: none;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.edge-pull-zone {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 24px;
+  z-index: 3500;
+  display: none;
+}
+
+body.device-phone .desktop-icons,
+body.device-tablet:not(.tablet-show-sidebar) .desktop-icons {
+  display: none;
+}
+
+body.device-phone .desktop {
+  padding-left: 1rem;
+}
+
+body.device-phone .windows-grid,
+body.device-tablet .windows-grid {
+  grid-template-columns: 1fr;
+}
+
+body.device-phone .taskbar-wins {
+  display: none;
+}
+
+body.device-phone .dock {
+  bottom: max(14px, env(safe-area-inset-bottom, 0px));
+}
+
+body.device-phone.mobile-switcher-available .edge-pull-zone,
+body.device-phone.mobile-switcher-available .swipe-hint {
+  display: block;
+}
+
+body.device-phone .window[data-expanded="1"] {
+  left: 0 !important;
+  right: 0 !important;
+  width: auto !important;
+}
+
+body.device-phone .win-expand-use {
+}
+
+@media (max-width: 820px) {
+  body.device-auto .windows-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 620px) {
+  body.device-auto .desktop-icons {
+    display: none;
+  }
+
+  body.device-auto .desktop {
+    padding-left: 1rem;
+  }
+
+  body.device-auto .taskbar-wins {
+    display: none;
+  }
+}

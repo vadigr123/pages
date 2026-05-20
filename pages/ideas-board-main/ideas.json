@@ -1,0 +1,434 @@
+{
+  "categories": [
+    {
+      "id": "cat-mn1l7w72c8909",
+      "name": "Character",
+      "status": "",
+      "x": 100,
+      "y": 100,
+      "color": "#16213e",
+      "ideas": [
+        {
+          "id": "idea-mn1n4cw0hfz2o",
+          "title": "Xiomi mascot [IL]",
+          "description": "",
+          "visibility": "public",
+          "tags": [
+            "Done",
+            "Testing"
+          ],
+          "images": [
+            "uploads/photo_2026-03-06_12-24-58.jpg"
+          ],
+          "links": [],
+          "refs": []
+        },
+        {
+          "id": "idea-mn1n4us2xvp3b",
+          "title": "Android mascot [IL]",
+          "description": "",
+          "visibility": "public",
+          "tags": [
+            "Done",
+            "Testing"
+          ],
+          "images": [
+            "uploads/photo_2026-03-06_13-07-28.jpg"
+          ],
+          "links": [],
+          "refs": []
+        },
+        {
+          "id": "idea-mn1n66laggu3u",
+          "title": "White Dalmatian [IL / Upgrade]",
+          "description": "",
+          "visibility": "public",
+          "tags": [
+            "no data"
+          ],
+          "images": [
+            "uploads/photo_2026-02-25_11-17-29.jpg",
+            "uploads/photo_2026-01-22_22-40-32.jpg"
+          ],
+          "links": [],
+          "refs": [
+            {
+              "label": "Civitai [Original / old version]",
+              "url": "https://civitai.com/models/2052031/dalmatian-biliy-and-bilij-fursona-commision",
+              "color": "blue"
+            },
+            {
+              "label": "Original [Author / Telegram]",
+              "url": "https://t.me/white_nsfw",
+              "color": "gray"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cat-mn1mykw9uiw4a",
+      "name": "Style",
+      "status": "",
+      "x": 480,
+      "y": 100,
+      "color": "#16213e",
+      "ideas": [
+        {
+          "id": "idea-mn1myw0bjrwc1",
+          "title": "Fursuit [Z-image]",
+          "description": "",
+          "visibility": "public",
+          "tags": [
+            "Done"
+          ],
+          "images": [
+            "https://pbs.twimg.com/media/HAeIFk6bkAADLBz?format=jpg&name=large",
+            "https://pbs.twimg.com/media/HBAEKeTa4AEQ4WA?format=jpg&name=large",
+            "https://pbs.twimg.com/media/HBAWr0UbsAUy28n?format=jpg&name=4096x4096",
+            "https://pbs.twimg.com/media/HBGJ92jakAYezM8?format=jpg&name=4096x4096"
+          ],
+          "links": [],
+          "refs": [
+            {
+              "label": "Original [Civitai]",
+              "url": "https://civitai.com/models/563588/fursuit-lora-or-furry-style",
+              "color": "blue"
+            }
+          ]
+        },
+        {
+          "id": "idea-mn1mzojme8t71",
+          "title": "Chibi [IL]",
+          "description": "",
+          "visibility": "public",
+          "tags": [
+            "Done"
+          ],
+          "images": [
+            "https://pbs.twimg.com/media/HAZnEKLaMAExVnw?format=jpg&name=small",
+            "https://pbs.twimg.com/media/HAPapT3a8AAUJef?format=png&name=900x900",
+            "https://pbs.twimg.com/media/HAOiq_GaoAAT2M8?format=jpg&name=medium",
+            "https://pbs.twimg.com/media/HBGN6FobQAAKwAE?format=jpg&name=large",
+            "https://pbs.twimg.com/media/HBMOd9wbMAAHe8U?format=jpg&name=4096x4096"
+          ],
+          "links": [],
+          "refs": []
+        },
+        {
+          "id": "idea-mn1n07t38pto3",
+          "title": "Milkytiger [Il / Upgrade]",
+          "description": "",
+          "visibility": "public",
+          "tags": [
+            "no data"
+          ],
+          "images": [
+            "https://pbs.twimg.com/media/HC-D6o2bMAAPb_9?format=jpg&name=large",
+            "https://pbs.twimg.com/media/HBxnFNWbUAAaT6x?format=jpg&name=large",
+            "https://pbs.twimg.com/media/HB2w3m7awAA8Tf0?format=jpg&name=large",
+            "https://pbs.twimg.com/media/HCppUVlbQAAVGaq?format=jpg&name=large",
+            "https://pbs.twimg.com/media/HCppYK3bgAAvE-d?format=jpg&name=large"
+          ],
+          "links": [],
+          "refs": [
+            {
+              "label": "Original [Author / Twitter (X)]",
+              "url": "https://x.com/HklMilkybot",
+              "color": "red"
+            },
+            {
+              "label": "Original [Author / bsky]",
+              "url": "https://bsky.app/profile/milkybot.bsky.social",
+              "color": "blue"
+            }
+          ]
+        },
+        {
+          "id": "idea-mn1n1au75nu3u",
+          "title": "Realistic / 3D [IL]",
+          "description": "",
+          "visibility": "public",
+          "tags": [
+            "no data"
+          ],
+          "images": [],
+          "links": [],
+          "refs": []
+        },
+        {
+          "id": "idea-mn1n2hexeqlsh",
+          "title": "Young [IL / UPgrade]",
+          "description": "",
+          "visibility": "public",
+          "tags": [
+            "no data"
+          ],
+          "images": [
+            "https://pbs.twimg.com/media/HAU2dDPaYAAATlH?format=jpg&name=large",
+            "https://pbs.twimg.com/media/G78WTWdagAIdXj0?format=jpg&name=large",
+            "https://pbs.twimg.com/media/HAK9La0b0AAuQl_?format=jpg&name=large"
+          ],
+          "links": [],
+          "refs": []
+        },
+        {
+          "id": "idea-mn1n33s10mf9m",
+          "title": "Minecraft Skin [IL]",
+          "description": "",
+          "visibility": "public",
+          "tags": [
+            "Testing"
+          ],
+          "images": [
+            "https://www.minecraftskins.com/uploads/preview-skins/2026/03/16/caspian---cuphead-oc-23928173.png?v947",
+            "https://www.minecraftskins.com/uploads/preview-skins/2026/03/17/my-fursona--rain--23929961.png?v947",
+            "https://www.minecraftskins.com/uploads/preview-skins/2026/03/18/blue-panda-soup-23931894.png?v947",
+            "https://www.minecraftskins.com/uploads/preview-skins/2026/03/21/blue-furry-femboy-23938581.png?v947",
+            "https://www.minecraftskins.com/uploads/preview-skins/2026/03/22/red-panda---fuzzy---ears-mod--tail-and-ear-tips---v1-1--23940072.png?v947",
+            "https://www.minecraftskins.com/uploads/preview-skins/2026/03/16/mailpup-23928628.png?v947"
+          ],
+          "links": [],
+          "refs": []
+        },
+        {
+          "id": "idea-mn1n3smirhm83",
+          "title": "Child Drawing [IL]",
+          "description": "",
+          "visibility": "public",
+          "tags": [
+            "no data"
+          ],
+          "images": [
+            "https://image-b2.civitai.com/file/civitai-media-cache/ba231d55-75e9-486c-af16-c541caffc5f2/original"
+          ],
+          "links": [],
+          "refs": [
+            {
+              "label": "Civitai Ref",
+              "url": "https://civitai.com/models/405372/child-drawing",
+              "color": "yellow"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cat-mn1nepl65kvxm",
+      "name": "Concept",
+      "status": "",
+      "x": 977,
+      "y": 99,
+      "color": "#16213e",
+      "ideas": [
+        {
+          "id": "idea-mn1neuz1gw4l1",
+          "title": "China meme [IL]",
+          "description": "",
+          "visibility": "public",
+          "tags": [
+            "no data"
+          ],
+          "images": [
+            "https://cdn.discordapp.com/attachments/1390664823020196004/1479058272018239610/1.jpg?ex=69c1115b&is=69bfbfdb&hm=134a5b8db1d87e94c59dc5eed8667aa7a4d193b1a4225e946c2654e7c8443cd1"
+          ],
+          "links": [],
+          "refs": []
+        },
+        {
+          "id": "idea-mn1nfwr1j6k3r",
+          "title": "Cigarette love [IL]",
+          "description": "",
+          "visibility": "public",
+          "tags": [
+            "no data"
+          ],
+          "images": [
+            "https://pbs.twimg.com/media/HA-OQ1dXIAAacEK?format=jpg&name=medium"
+          ],
+          "links": [],
+          "refs": []
+        },
+        {
+          "id": "idea-mn1nxjd54g55u",
+          "title": "Verification mask [IL]",
+          "description": "",
+          "visibility": "public",
+          "tags": [
+            "no data"
+          ],
+          "images": [
+            "https://pbs.twimg.com/media/HD6xmItboAA3mZs?format=jpg&name=4096x4096"
+          ],
+          "links": [],
+          "refs": []
+        },
+        {
+          "id": "idea-mn1o1wvqcl6i8",
+          "title": "Valentine [IL / #1]",
+          "description": "",
+          "visibility": "public",
+          "tags": [
+            "no data"
+          ],
+          "images": [
+            "https://pbs.twimg.com/media/HBIk0p1akAIWO1m?format=jpg&name=4096x4096"
+          ],
+          "links": [],
+          "refs": []
+        },
+        {
+          "id": "idea-mn1o4fwfgorbs",
+          "title": "Valentine [IL / #2]",
+          "description": "",
+          "visibility": "public",
+          "tags": [
+            "no data"
+          ],
+          "images": [
+            "https://pbs.twimg.com/media/HBETNx4akAcQip9?format=jpg&name=small"
+          ],
+          "links": [],
+          "refs": []
+        },
+        {
+          "id": "idea-mn1oaopxw7ahx",
+          "title": "Lazy ass [IL]",
+          "description": "",
+          "visibility": "public",
+          "tags": [
+            "no data"
+          ],
+          "images": [
+            "https://pbs.twimg.com/media/G_9BoxnbEAEAwbe?format=jpg&name=4096x4096"
+          ],
+          "links": [],
+          "refs": [
+            {
+              "label": "Original [Author]",
+              "url": "https://x.com/ForestBite/status/2017405130002645406/photo/1",
+              "color": "red"
+            }
+          ]
+        },
+        {
+          "id": "idea-mn1p04cb3ptzj",
+          "title": "Slot machine [IL]",
+          "description": "",
+          "visibility": "public",
+          "tags": [
+            "No data"
+          ],
+          "images": [
+            "https://pbs.twimg.com/media/HB8F0ZzW0AAPVVZ?format=jpg&name=large"
+          ],
+          "links": [],
+          "refs": [
+            {
+              "label": "Original [Author]",
+              "url": "https://x.com/vivianpawz/status/2026344761716588614",
+              "color": "blue"
+            }
+          ]
+        },
+        {
+          "id": "idea-mn1p1lcmivy8e",
+          "title": "No horny [IL]",
+          "description": "",
+          "visibility": "public",
+          "tags": [
+            "no data"
+          ],
+          "images": [
+            "https://pbs.twimg.com/media/HBVceolbcAEKzpZ?format=png&name=900x900"
+          ],
+          "links": [],
+          "refs": []
+        },
+        {
+          "id": "idea-mndo7x0jq7l7x",
+          "title": "Fish time",
+          "description": "",
+          "visibility": "public",
+          "tags": [
+            "Concept"
+          ],
+          "images": [
+            "https://i.pinimg.com/736x/ef/db/f6/efdbf622d3570af71fc5cd5eac55fddd.jpg"
+          ],
+          "links": [],
+          "refs": [
+            {
+              "label": "Pinterest",
+              "url": "https://cz.pinterest.com/pin/849139704785231552/",
+              "color": "red"
+            }
+          ]
+        },
+        {
+          "id": "idea-mndob0k2cv0zg",
+          "title": "The White Rabbit pointing at clock | White Rabbit",
+          "description": "",
+          "visibility": "public",
+          "tags": [
+            "Concept"
+          ],
+          "images": [
+            "https://i.pinimg.com/736x/56/ec/71/56ec71d73b1a5db5a0cd235a28ef8dcd.jpg"
+          ],
+          "links": [],
+          "refs": [
+            {
+              "label": "CivitAI",
+              "url": "https://civitai.com/models/2149131/the-white-rabbit-pointing-at-clock-or-white-rabbit-illustriousnoobai-by-mlaofmd",
+              "color": "blue"
+            }
+          ]
+        },
+        {
+          "id": "idea-mndogifvn10t9",
+          "title": "Furry sad wolf",
+          "description": "",
+          "visibility": "private",
+          "tags": [],
+          "images": [
+            "https://i.pinimg.com/736x/33/2d/de/332dde2b2924f7fbb6edbda49f24749a.jpg",
+            "https://i.pinimg.com/736x/2b/90/e5/2b90e59374c55328af4b13427e0241bd.jpg",
+            "https://i.pinimg.com/736x/87/8b/d2/878bd2de81f85f2e8cc443f0dd376560.jpg",
+            "https://i.pinimg.com/736x/01/2e/e2/012ee21db9dd3684bb0b7277f536e953.jpg",
+            "https://i.pinimg.com/1200x/f6/c3/a9/f6c3a98d6057b491d590831863e2477f.jpg"
+          ],
+          "links": [],
+          "refs": []
+        }
+      ]
+    }
+  ],
+  "settings": {
+    "title": "Ideas Board",
+    "subtitle": "A space for creative thoughts",
+    "githubRepo": "https://github.com/vadigr123/ideas-board",
+    "showMinimap": true,
+    "gridDots": true
+  },
+  "notes": [
+    {
+      "id": "note-mn1nrhatke18r",
+      "title": "Checkpoint",
+      "content": "Try to learn how to create your own Checkpoint",
+      "color": "pink",
+      "x": 104,
+      "y": 1145,
+      "width": 240
+    },
+    {
+      "id": "note-mn1ns8jq3a6ah",
+      "title": "",
+      "content": "I'm too lazy for everything.",
+      "color": "yellow",
+      "x": 488,
+      "y": -6,
+      "width": 240
+    }
+  ]
+}
