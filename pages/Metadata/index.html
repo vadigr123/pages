@@ -1,0 +1,1412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MetaMouse — SD Metadata Inspector</title>
+<meta property="og:title" content="MetaMouse — SD Metadata Inspector | lofi.os">
+<meta property="og:description" content="Drop any AI-generated PNG and MetaMouse will sniff out all the hidden metadata. Free, local, no uploads.">
+<meta property="og:image" content="https://vadigr123.github.io/pages/Metadata/assets/good.png">
+<meta property="og:url" content="https://vadigr123.github.io/pages/Metadata/">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#FFD600">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=VT323&family=Space+Mono:wght@400;700&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../css/os-shared.css">
+<link rel="stylesheet" href="../../css/metamouse-page.css">
+<!--REMOVE_STYLE
+<style>
+:root {
+  --bg:#1a1a1a; --card:#2a2a2a; --accent:#f0c040; --accent2:#d4a000;
+  --dark:#0d0d0d; --text:#e8e8e8; --muted:#888; --border:#3a3a3a;
+  --good:#5cb85c; --bad:#e05c5c; --radius:20px;
+  --shadow:0 4px 24px rgba(0,0,0,0.30);
+}
+:root.light-theme {
+  --bg:#fdf6e3; --card:#fffdf5; --accent:#f0c040; --accent2:#d4a000;
+  --dark:#2a2a2a; --text:#3a3a3a; --muted:#888; --border:#e8dfc0;
+  --good:#5cb85c; --bad:#e05c5c; --radius:20px;
+  --shadow:0 4px 24px rgba(0,0,0,0.10);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:"Nunito",sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+body::before{content:"";position:fixed;inset:0;background-image:radial-gradient(circle,#d4c49a 1px,transparent 1px);background-size:28px 28px;opacity:.3;pointer-events:none;z-index:0}
+header{position:relative;z-index:10;display:flex;align-items:center;justify-content:space-between;padding:18px 40px;background:var(--dark);border-bottom:4px solid var(--accent)}
+.header-controls{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.theme-toggle, .lang-select{background:var(--accent);color:var(--dark);font-weight:800;font-size:.78rem;padding:8px 14px;border-radius:99px;letter-spacing:1px;text-transform:uppercase;border:none;cursor:pointer;transition:all .2s}
+.theme-toggle:hover, .lang-select:hover{background:var(--accent2);box-shadow:0 4px 12px rgba(0,0,0,.3)}
+.lang-select{text-transform:none;font-size:.8rem;padding:6px 12px}
+.lang-select option{background:var(--card);color:var(--text)}
+.theme-toggle.dark-active{background:var(--accent)}
+.theme-toggle.light-active{background:#666}
+
+.logo{display:flex;align-items:center;gap:14px}
+.logo img{height:56px;filter:drop-shadow(0 2px 6px rgba(0,0,0,.4));animation:bounce 2.4s ease-in-out infinite}
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+.logo-text{font-family:"Fredoka One",cursive;font-size:2rem;color:var(--accent);letter-spacing:1px;line-height:1}
+.logo-sub{font-size:.75rem;color:#aaa;letter-spacing:2px;text-transform:uppercase;margin-top:2px}
+.header-badge{background:var(--accent);color:var(--dark);font-weight:800;font-size:.78rem;padding:5px 14px;border-radius:99px;letter-spacing:1px;text-transform:uppercase}
+.hero{position:relative;z-index:5;display:flex;align-items:center;justify-content:center;gap:40px;padding:50px 40px 30px;max-width:900px;margin:0 auto;flex-wrap:wrap}
+.hero-text h1{font-family:"Fredoka One",cursive;font-size:2.6rem;color:var(--text);line-height:1.15}
+.hero-text h1 span{color:var(--accent2)}
+.hero-text p{margin-top:10px;font-size:1rem;color:var(--muted);max-width:400px;line-height:1.6}
+.hero-mascot img{height:200px;filter:drop-shadow(0 8px 20px rgba(0,0,0,.18));animation:float 3s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-12px) rotate(2deg)}}
+.tags-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.tag{background:var(--dark);color:var(--accent);font-size:.72rem;font-weight:700;padding:4px 12px;border-radius:99px;letter-spacing:.5px;text-transform:uppercase}
+.drop-section{position:relative;z-index:5;max-width:700px;margin:10px auto 0;padding:0 20px}
+.drop-zone{border:3px dashed var(--accent2);border-radius:var(--radius);background:var(--card);padding:48px 30px;text-align:center;cursor:pointer;transition:all .2s;box-shadow:var(--shadow);position:relative;overflow:hidden}
+.drop-zone:hover,.drop-zone.dragover{border-color:var(--accent);background:var(--card);transform:translateY(-2px);box-shadow:0 8px 32px rgba(0,0,0,.14)}
+.drop-zone .drop-icon img{height:90px;margin-bottom:10px;filter:drop-shadow(0 4px 10px rgba(0,0,0,.12));transition:transform .2s}
+.drop-zone:hover .drop-icon img{transform:scale(1.08) rotate(-4deg)}
+.drop-zone h2{font-family:"Fredoka One",cursive;font-size:1.5rem;color:var(--text)}
+.drop-zone p{color:var(--text);margin-top:6px;font-size:.9rem}
+.drop-zone input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.btn-browse{display:inline-block;margin-top:18px;background:var(--accent);color:var(--dark);font-family:"Fredoka One",cursive;font-size:1.1rem;padding:10px 32px;border-radius:99px;border:none;cursor:pointer;box-shadow:0 4px 0 var(--accent2);pointer-events:none;font-weight:700}
+#results{position:relative;z-index:5;max-width:900px;margin:30px auto 60px;padding:0 20px;display:none}
+.result-header{display:flex;align-items:center;gap:16px;margin-bottom:20px;flex-wrap:wrap}
+.result-header img{height:70px;filter:drop-shadow(0 4px 10px rgba(0,0,0,.15))}
+.result-header h2{font-family:"Fredoka One",cursive;font-size:1.8rem;color:var(--text)}
+.result-header p{color:var(--muted);font-size:.9rem;margin-top:3px}
+.files-grid{display:grid;gap:20px}
+.file-card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);border:2px solid var(--border);overflow:hidden;animation:slideIn .3s ease both}
+@keyframes slideIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+.file-card-header{display:flex;align-items:center;gap:14px;padding:16px 20px;background:var(--dark);color:white;flex-wrap:wrap}
+.file-thumb{width:52px;height:52px;border-radius:10px;object-fit:cover;border:2px solid var(--accent)}
+.file-name{font-weight:800;font-size:1rem;color:white;word-break:break-all}
+.file-size{font-size:.78rem;color:#aaa;margin-top:2px}
+.status-badge{margin-left:auto;display:flex;align-items:center;gap:6px;font-weight:800;font-size:.82rem;padding:6px 14px;border-radius:99px;flex-shrink:0}
+.status-badge img{height:28px}
+.status-badge.found{background:#1a3a1a;color:#7be87b}
+.status-badge.not-found{background:#3a1a1a;color:#e87b7b}
+.meta-body{padding:20px}
+.meta-section{margin-bottom:18px}
+.meta-section-title{font-family:"Fredoka One",cursive;font-size:1rem;color:var(--accent2);margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.meta-section-title::before{content:"";display:inline-block;width:8px;height:8px;background:var(--accent);border-radius:50%}
+.meta-table{width:100%;border-collapse:collapse;font-size:.85rem}
+.meta-table tr{border-bottom:1px solid var(--border)}
+.meta-table tr:last-child{border-bottom:none}
+.meta-table td:first-child{width:160px;padding:7px 10px 7px 0;font-weight:700;color:var(--muted);vertical-align:top;white-space:nowrap}
+.meta-table td:last-child{padding:7px 0;color:var(--text);word-break:break-word}
+.prompt-box{background:var(--card);border-left:4px solid var(--accent);border-radius:8px;padding:12px 14px;font-size:.83rem;line-height:1.6;color:var(--text);white-space:pre-wrap;word-break:break-word;max-height:180px;overflow-y:auto}
+.no-meta{text-align:center;padding:30px;color:var(--muted)}
+.no-meta img{height:80px;margin-bottom:10px}
+.no-meta p{font-size:.9rem}
+.copy-btn{background:var(--accent);border:none;border-radius:6px;padding:3px 10px;font-size:.75rem;font-weight:700;cursor:pointer;color:var(--dark);margin-left:8px;transition:all .15s}
+.copy-btn:hover{background:var(--accent2);color:white}
+.copy-btn.copied{background:var(--good);color:white}
+.clear-btn{background:transparent;border:2px solid var(--border);border-radius:99px;padding:7px 20px;font-family:"Nunito",sans-serif;font-weight:700;font-size:.85rem;cursor:pointer;color:var(--text);transition:all .15s;margin-left:auto}
+.clear-btn:hover{border-color:var(--bad);color:var(--bad)}
+.file-thumb{cursor:pointer;transition:transform .2s,filter .2s}
+.file-thumb:hover{transform:scale(1.05);filter:brightness(1.1)}
+.workflow-viewer{background:var(--dark);border-radius:10px;padding:12px 14px;margin-top:12px;max-height:400px;overflow-y:auto;font-size:.8rem;font-family:monospace}
+.workflow-text{background:var(--dark);border-radius:10px;padding:12px 14px;margin-top:12px;max-height:400px;overflow-y:auto;font-size:.75rem;font-family:monospace;color:var(--text);white-space:pre-wrap;word-break:break-word;border:1px solid var(--border)}
+.workflow-node{background:var(--card);border-left:3px solid var(--accent);padding:10px;margin-bottom:8px;border-radius:6px;cursor:pointer;transition:all .2s}
+.workflow-node:hover{background:var(--border);transform:translateX(4px)}
+.workflow-node-title{color:var(--accent2);font-weight:700;margin-bottom:4px}
+.workflow-node-content{color:var(--text);font-size:.75rem;line-height:1.4}
+.workflow-canvas-container{background:var(--dark);border-radius:10px;margin-top:12px;border:1px solid var(--border);overflow:hidden;max-height:600px;position:relative;cursor:grab}
+.workflow-canvas-container.dragging{cursor:grabbing}
+.workflow-canvas-container canvas{border:1px solid var(--border);border-radius:6px;background:var(--card);display:block;position:absolute;top:0;left:0}
+.workflow-info{background:var(--card);border-top:1px solid var(--border);padding:8px 12px;font-size:.7rem;color:var(--muted);text-align:center}
+.expand-btn{background:var(--accent);border:none;border-radius:6px;padding:5px 12px;font-size:.75rem;font-weight:700;cursor:pointer;color:var(--dark);margin-left:8px;transition:all .15s}
+.expand-btn:hover{background:var(--accent2)}
+.expand-btn.expanded{background:var(--accent2)}
+.view-toggle{display:flex;gap:8px;margin-left:auto}
+.view-btn{background:var(--border);border:none;border-radius:4px;padding:4px 10px;font-size:.7rem;font-weight:700;cursor:pointer;color:var(--text);transition:all .15s}
+.view-btn.active{background:var(--accent);color:var(--dark)}
+.view-btn:hover{background:var(--accent2);color:var(--dark)}
+.tab-row{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;border-bottom:2px solid var(--border);padding-bottom:12px;align-items:center}
+.tab-btn{background:transparent;border:none;border-radius:4px;padding:8px 14px;font-size:.85rem;font-weight:700;cursor:pointer;color:var(--muted);transition:all .2s;display:flex;align-items:center;gap:6px}
+.tab-btn.active{color:var(--accent);border-bottom:3px solid var(--accent);padding-bottom:5px}
+.tab-btn:hover:not(.active){color:var(--accent2)}
+.tab-panel{display:none}
+.tab-panel.active{display:block}
+.edit-toggle{background:var(--accent);color:var(--dark);border:none;border-radius:6px;padding:6px 12px;font-size:.75rem;font-weight:700;cursor:pointer;margin-left:auto;transition:all .15s;flex-shrink:0}
+.edit-toggle:hover{background:var(--accent2)}
+.edit-toggle.editing{background:#e05c5c;color:white}
+.edit-form{display:grid;gap:12px}
+.edit-form-group{display:grid;gap:4px}
+.edit-form-group label{font-weight:700;font-size:.8rem;color:var(--accent);text-transform:uppercase;letter-spacing:.5px}
+.edit-form-group input,.edit-form-group textarea{background:var(--dark);border:1px solid var(--border);border-radius:6px;padding:8px 12px;font-family:Nunito,sans-serif;font-size:.85rem;color:var(--text);transition:all .15s}
+.edit-form-group input:focus,.edit-form-group textarea:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 2px rgba(240,192,64,.1)}
+.edit-form-group textarea{resize:vertical;min-height:80px}
+.edit-form-group input[type="number"]{width:120px}
+.edit-actions{display:flex;gap:8px;margin-top:16px;padding-top:12px;border-top:1px solid var(--border)}
+.save-btn{background:var(--good);color:white;flex:1;padding:10px;border-radius:6px;border:none;font-weight:700;font-size:.8rem;cursor:pointer;transition:all .15s}
+.save-btn:hover{opacity:.9;box-shadow:0 4px 12px rgba(92,184,92,.3)}
+.cancel-btn{background:var(--border);color:var(--text);flex:1;padding:10px;border-radius:6px;border:none;font-weight:700;font-size:.8rem;cursor:pointer;transition:all .15s}
+.cancel-btn:hover{background:var(--bad);color:white}
+.export-btn{background:var(--accent);color:var(--dark);flex:1;padding:10px;border-radius:6px;border:none;font-weight:700;font-size:.8rem;cursor:pointer;transition:all .15s}
+.export-btn:hover{background:var(--accent2)}
+.modal{display:none;position:fixed;z-index:200;left:0;top:0;width:100%;height:100%;background-color:rgba(0,0,0,.7);animation:fadeIn .2s;overflow:auto}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.modal.show{display:flex;align-items:center;justify-content:center}
+.modal-content{background:var(--card);border-radius:var(--radius);padding:0;max-width:95vw;max-height:95vh;display:flex;flex-direction:column;box-shadow:0 8px 48px rgba(0,0,0,.5);border:2px solid var(--accent)}
+.modal-header{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;background:var(--dark);border-bottom:2px solid var(--border)}
+.modal-header h3{margin:0;color:var(--text);font-size:1.2rem;font-family:"Fredoka One",cursive}
+.modal-close{background:transparent;border:none;font-size:1.8rem;cursor:pointer;color:var(--accent);transition:color .2s}
+.modal-close:hover{color:var(--accent2)}
+.modal-body{flex:1;overflow:hidden;padding:20px;display:flex;align-items:center;justify-content:center;max-height:calc(95vh - 60px);width:100%}
+.modal-body img{max-width:90vw;max-height:90vh;object-fit:contain;width:auto;height:auto;image-rendering:crisp-edges}
+footer{position:relative;z-index:5;text-align:center;padding:20px;color:var(--muted);font-size:.8rem;border-top:2px dashed var(--border);display:flex;align-items:center;justify-content:center;gap:8px}
+footer img{height:30px;opacity:.7}
+.scroll-top{position:fixed;bottom:24px;right:24px;z-index:100;background:var(--dark);border:3px solid var(--accent);border-radius:50%;width:48px;height:48px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:1.3rem;color:var(--accent);box-shadow:var(--shadow);opacity:0;transition:opacity .3s;pointer-events:none}
+.scroll-top.visible{opacity:1;pointer-events:all}
+</style>-->
+</head>
+<body class="lofi-os-page"><div class="os-taskbar">
+  <a class="os-taskbar-logo" href="https://vadigr123.github.io/">~/lofi.os</a>
+  <span class="os-taskbar-sep">|</span>
+  <span class="os-taskbar-title">metamouse.app</span>
+  <nav class="os-taskbar-nav" aria-label="Site pages">
+    <a class="os-nav-link" href="/">[~/pages]</a>
+    <a class="os-nav-link" href="/pages/e621-main/index.html">[e621/]</a>
+    <a class="os-nav-link active" href="/pages/Metadata/index.html">[metadata/]</a>
+    <a class="os-nav-link" href="/pages/ideas-board-main/index.html">[ideas/]</a>
+  </nav>
+  <select id="langSelect" class="os-taskbar-lang" aria-label="Language">
+    <option value="en">English</option>
+    <option value="cs">Čeština</option>
+    <option value="pl">Polski</option>
+    <option value="it">Italiano</option>
+    <option value="fr">Français</option>
+    <option value="uk">Українська</option>
+    <option value="ru">Русский</option>
+    <option value="es">Español</option>
+    <option value="zh">中文</option>
+    <option value="ja">日本語</option>
+    <option value="vi">Tiếng Việt</option>
+  </select>
+  <div class="os-theme-btns">
+    <div class="os-theme-btn dark active" title="dark" onclick="OsTheme.set('dark',this)"></div>
+    <div class="os-theme-btn white" title="light" onclick="OsTheme.set('white',this)"></div>
+  </div>
+</div>
+<script defer src="../../js/os-theme.js"></script>
+<main class="mm-main">
+<div class="mm-hero">
+  <div>
+    <h1>Peek inside your<br><span>AI-generated</span> images!</h1>
+    <p>Drop any PNG generated by Stable Diffusion, AUTOMATIC1111, ComfyUI, Forge, InvokeAI and more — MetaMouse will sniff out all the hidden metadata for you!</p>
+    <div class="mm-tags-row">
+      <span class="mm-tag">A1111</span><span class="mm-tag">ComfyUI</span><span class="mm-tag">Forge</span>
+      <span class="mm-tag">InvokeAI</span><span class="mm-tag">SD Next</span><span class="mm-tag">NovelAI</span>
+    </div>
+  </div>
+  <div class="mm-hero-mascot">
+    <img id="hero-img" src="assets/like.png" alt="mascot">
+  </div>
+</div>
+
+  <div >
+  <div class="mm-drop-zone" id="dropZone">
+    <input type="file" id="fileInput" accept="image/*,.safetensors" multiple>
+    <div class="mm-drop-zone-row">
+      <div class="drop-icon"><img src="assets/document.png" alt="drop"></div>
+      <div class="mm-drop-zone-copy">
+        <h2>Drop your images here!</h2>
+        <p>Supports PNG, JPG, WebP, and LoRA (.safetensors) — drop multiple files at once</p>
+        <div class="os-btn os-btn-primary">Browse Files</div>
+      </div>
+    </div>
+  </div>
+</div><div id="results">
+  <div class="mm-result-header">
+    <img id="result-mascot" src="assets/good.png" alt="">
+    <div>
+      <h2>Metadata Results</h2>
+      <p id="result-subtitle">Inspecting your files...</p>
+    </div>
+    <button class="clear-btn" id="clearBtn">✕ Clear all</button>
+  </div>
+  <div class="files-grid" id="filesGrid"></div>
+</div>
+
+</main>
+<footer class="mm-footer">
+  <img src="assets/neutral.png" alt="">
+  MetaMouse — All processing happens in your browser. No uploads, no tracking. 🐭
+</footer>
+
+<button class="scroll-top" id="scrollTop">↑</button>
+
+<div id="imageModal" class="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3 id="modalTitle">Image Preview</h3>
+      <button class="modal-close" id="modalClose">&times;</button>
+    </div>
+    <div class="modal-body">
+      <img id="modalImage" src="" alt="Preview">
+    </div>
+  </div>
+</div>
+
+<script>
+// 🌍 TRANSLATIONS
+var TRANSLATIONS = {
+  en: {
+    peek: "Peek inside your", aiGenerated: "AI-generated", images: "images!",
+    drop: "Drop any PNG generated by Stable Diffusion, AUTOMATIC1111, ComfyUI, Forge, InvokeAI and more — MetaMouse will sniff out all the hidden metadata for you!",
+    dropHere: "Drop your images here!", supportsFormats: "Supports PNG, JPG, WebP — drop multiple files at once",
+    browseFiles: "Browse Files", metadataResults: "Metadata Results", inspecting: "Inspecting your files...",
+    clearAll: "✕ Clear all", footer: "All processing happens in your browser. No uploads, no tracking. 🐭",
+    noMeta: "No Stable Diffusion metadata found.", noMetaDesc: "File may not be from a supported tool, or metadata was stripped.",
+    positivePrompt: "Positive Prompt", negativePrompt: "Negative Prompt",
+    generationParams: "Generation Parameters", copyRaw: "Copy raw", copy: "Copy",
+    copied: "Copied!", pleaseDrop: "Please drop image files!", sniffing: "Sniffing through",
+    fileInspected: "file(s) inspected —", withMeta: "with SD metadata",
+    loraMetadata: "LoRA Metadata", loraName: "LoRA Name", loraDescription: "Description", loraVersion: "Version", loraAuthor: "Author", loraInfo: "LoRA Information"
+  },
+  cs: {
+    peek: "Podívejte se dovnitř vaší", aiGenerated: "AI-generované", images: "obrázky!",
+    drop: "Přetáhněte libovolný PNG generovaný Stable Diffusion, AUTOMATIC1111, ComfyUI, Forge, InvokeAI a další — MetaMouse vám vykouzlí všechna skrytá metadata!",
+    dropHere: "Přetáhněte své obrázky sem!", supportsFormats: "Podporuje PNG, JPG, WebP — přetáhněte najednou více souborů",
+    browseFiles: "Procházet soubory", metadataResults: "Výsledky metadat", inspecting: "Inspekce vašich souborů...",
+    clearAll: "✕ Vymazat vše", footer: "Veškeré zpracování probíhá ve vašem prohlížeči. Žádné nahrávání, žádné sledování. 🐭",
+    noMeta: "Nebyla nalezena metadata Stable Diffusion.", noMetaDesc: "Soubor nemusí být z podporovaného nástroje nebo byla metadata odstraněna.",
+    positivePrompt: "Kladný Prompt", negativePrompt: "Záporný Prompt",
+    generationParams: "Parametry generování", copyRaw: "Kopírovat surový", copy: "Kopírovat",
+    copied: "Zkopírováno!", pleaseDrop: "Prosím přetáhněte soubory obrázků!", sniffing: "Čichání přes",
+    fileInspected: "soubor(y) inspekován —", withMeta: "s metadaty SD"
+  },
+  pl: {
+    peek: "Zajrzyj do swoich", aiGenerated: "wygenerowanych przez AI", images: "obrazów!",
+    drop: "Upuść dowolny plik PNG wygenerowany przez Stable Diffusion, AUTOMATIC1111, ComfyUI, Forge, InvokeAI i inne — MetaMouse wyciągnie dla Ciebie wszystkie ukryte metadane!",
+    dropHere: "Upuść tutaj swoje obrazy!", supportsFormats: "Obsługuje PNG, JPG, WebP — upuść wiele plików naraz",
+    browseFiles: "Przeglądaj pliki", metadataResults: "Wyniki metadanych", inspecting: "Inspekowanie plików...",
+    clearAll: "✕ Wyczyść wszystko", footer: "Cała przetwarzanie odbywa się w Twojej przeglądarce. Brak wysyłania, brak śledzenia. 🐭",
+    noMeta: "Nie znaleziono metadanych Stable Diffusion.", noMetaDesc: "Plik może nie pochodzić z obsługiwanego narzędzia lub metadane zostały usunięte.",
+    positivePrompt: "Pozytywny Prompt", negativePrompt: "Negatywny Prompt",
+    generationParams: "Parametry generowania", copyRaw: "Skopiuj raw", copy: "Skopiuj",
+    copied: "Skopiowano!", pleaseDrop: "Proszę upuść pliki obrazów!", sniffing: "Wąchanie",
+    fileInspected: "plik(i) sprawdzony —", withMeta: "z metadanymi SD"
+  },
+  it: {
+    peek: "Dai un'occhiata ai tuoi", aiGenerated: "generati dall'IA", images: "immagini!",
+    drop: "Rilascia qualsiasi PNG generato da Stable Diffusion, AUTOMATIC1111, ComfyUI, Forge, InvokeAI e altri — MetaMouse estrarrà tutti i metadati nascosti per te!",
+    dropHere: "Rilascia qui le tue immagini!", supportsFormats: "Supporta PNG, JPG, WebP — rilascia più file contemporaneamente",
+    browseFiles: "Sfoglia file", metadataResults: "Risultati metadati", inspecting: "Ispezione dei tuoi file...",
+    clearAll: "✕ Cancella tutto", footer: "Tutta l'elaborazione avviene nel tuo browser. Nessun caricamento, nessun tracciamento. 🐭",
+    noMeta: "Nessun metadato Stable Diffusion trovato.", noMetaDesc: "Il file potrebbe non provenire da uno strumento supportato o i metadati sono stati rimossi.",
+    positivePrompt: "Prompt positivo", negativePrompt: "Prompt negativo",
+    generationParams: "Parametri di generazione", copyRaw: "Copia raw", copy: "Copia",
+    copied: "Copiato!", pleaseDrop: "Rilascia i file immagine!", sniffing: "Ricerca",
+    fileInspected: "file ispezionato —", withMeta: "con metadati SD"
+  },
+  fr: {
+    peek: "Jetez un œil à vos", aiGenerated: "générées par l'IA", images: "images!",
+    drop: "Déposez n'importe quel PNG généré par Stable Diffusion, AUTOMATIC1111, ComfyUI, Forge, InvokeAI et autres — MetaMouse extraira tous les métadonnées cachées pour vous!",
+    dropHere: "Déposez vos images ici!", supportsFormats: "Supporte PNG, JPG, WebP — déposez plusieurs fichiers à la fois",
+    browseFiles: "Parcourir les fichiers", metadataResults: "Résultats des métadonnées", inspecting: "Inspection de vos fichiers...",
+    clearAll: "✕ Effacer tout", footer: "Tous les traitements s'effectuent dans votre navigateur. Aucun téléchargement, aucun suivi. 🐭",
+    noMeta: "Aucune métadonnée Stable Diffusion trouvée.", noMetaDesc: "Le fichier peut ne pas provenir d'un outil supporté ou les métadonnées ont été supprimées.",
+    positivePrompt: "Prompt positif", negativePrompt: "Prompt négatif",
+    generationParams: "Paramètres de génération", copyRaw: "Copier brut", copy: "Copier",
+    copied: "Copié!", pleaseDrop: "Déposez les fichiers image!", sniffing: "Inspection",
+    fileInspected: "fichier(s) inspecté(s) —", withMeta: "avec métadonnées SD"
+  },
+  uk: {
+    peek: "Подивіться всередину своїх", aiGenerated: "генерованих ШІ", images: "зображень!",
+    drop: "Скиньте будь-яке PNG, створене Stable Diffusion, AUTOMATIC1111, ComfyUI, Forge, InvokeAI та іншими — MetaMouse витягне всі приховані метадані для вас!",
+    dropHere: "Скиньте свої зображення сюди!", supportsFormats: "Підтримує PNG, JPG, WebP — скиньте кілька файлів одночасно",
+    browseFiles: "Огляд файлів", metadataResults: "Результати метаданих", inspecting: "Перевірка ваших файлів...",
+    clearAll: "✕ Очистити все", footer: "Вся обробка відбувається у вашому браузері. Без завантажень, без відстеження. 🐭",
+    noMeta: "Метадані Stable Diffusion не знайдені.", noMetaDesc: "Файл може не бути з підтримуваного інструменту або метадані були видалені.",
+    positivePrompt: "Позитивний промпт", negativePrompt: "Негативний промпт",
+    generationParams: "Параметри генерації", copyRaw: "Копіювати сирий", copy: "Копіювати",
+    copied: "Скопійовано!", pleaseDrop: "Скиньте файли зображень!", sniffing: "Перевірка",
+    fileInspected: "файл(и) перевірено —", withMeta: "з метаданими SD"
+  },
+  ru: {
+    peek: "Посмотрите внутрь своих", aiGenerated: "генерируемые ИИ", images: "изображений!",
+    drop: "Перетащите любой PNG, созданный Stable Diffusion, AUTOMATIC1111, ComfyUI, Forge, InvokeAI и другими — MetaMouse извлечет все скрытые метаданные для вас!",
+    dropHere: "Перетащите свои изображения сюда!", supportsFormats: "Поддерживает PNG, JPG, WebP — перетащите несколько файлов одновременно",
+    browseFiles: "Обзор файлов", metadataResults: "Результаты метаданных", inspecting: "Проверка ваших файлов...",
+    clearAll: "✕ Очистить все", footer: "Вся обработка происходит в вашем браузере. Без загрузок, без отслеживания. 🐭",
+    noMeta: "Метаданные Stable Diffusion не найдены.", noMetaDesc: "Файл может быть не из поддерживаемого инструмента или метаданные были удалены.",
+    positivePrompt: "Положительный промпт", negativePrompt: "Отрицательный промпт",
+    generationParams: "Параметры генерации", copyRaw: "Копировать сырой", copy: "Копировать",
+    copied: "Скопировано!", pleaseDrop: "Перетащите файлы изображений!", sniffing: "Проверка",
+    fileInspected: "файл(ы) проверено —", withMeta: "с метаданными SD"
+  },
+  es: {
+    peek: "Echa un vistazo a tus", aiGenerated: "generadas por IA", images: "¡imágenes!",
+    drop: "Suelta cualquier PNG generado por Stable Diffusion, AUTOMATIC1111, ComfyUI, Forge, InvokeAI y otros — ¡MetaMouse extraerá todos los metadatos ocultos para ti!",
+    dropHere: "¡Suelta tus imágenes aquí!", supportsFormats: "Soporta PNG, JPG, WebP — suelta múltiples archivos a la vez",
+    browseFiles: "Explorar archivos", metadataResults: "Resultados de metadatos", inspecting: "Inspeccionando tus archivos...",
+    clearAll: "✕ Limpiar todo", footer: "Todo el procesamiento ocurre en tu navegador. Sin cargas, sin seguimiento. 🐭",
+    noMeta: "No se encontraron metadatos de Stable Diffusion.", noMetaDesc: "El archivo puede no ser de una herramienta soportada o los metadatos fueron eliminados.",
+    positivePrompt: "Prompt positivo", negativePrompt: "Prompt negativo",
+    generationParams: "Parámetros de generación", copyRaw: "Copiar sin procesar", copy: "Copiar",
+    copied: "¡Copiado!", pleaseDrop: "¡Suelta los archivos de imagen!", sniffing: "Inspeccionando",
+    fileInspected: "archivo(s) inspeccionado(s) —", withMeta: "con metadatos SD"
+  },
+  zh: {
+    peek: "查看您的", aiGenerated: "AI生成的", images: "图像！",
+    drop: "拖放由 Stable Diffusion、AUTOMATIC1111、ComfyUI、Forge、InvokeAI 等生成的任何 PNG — MetaMouse 将为您提取所有隐藏的元数据！",
+    dropHere: "将您的图像拖放到这里！", supportsFormats: "支持 PNG、JPG、WebP — 一次拖放多个文件",
+    browseFiles: "浏览文件", metadataResults: "元数据结果", inspecting: "正在检查您的文件...",
+    clearAll: "✕ 清除全部", footer: "所有处理都在您的浏览器中进行。没有上传，没有跟踪。🐭",
+    noMeta: "未找到 Stable Diffusion 元数据。", noMetaDesc: "该文件可能不是来自受支持的工具，或元数据已被删除。",
+    positivePrompt: "正面提示词", negativePrompt: "负面提示词",
+    generationParams: "生成参数", copyRaw: "复制原始", copy: "复制",
+    copied: "已复制！", pleaseDrop: "请拖放图像文件！", sniffing: "检查中",
+    fileInspected: "个文件已检查 —", withMeta: "含有 SD 元数据"
+  },
+  ja: {
+    peek: "あなたの", aiGenerated: "AI生成", images: "画像をチェック！",
+    drop: "Stable Diffusion、AUTOMATIC1111、ComfyUI、Forge、InvokeAI などで生成された任意の PNG をドロップします — MetaMouse がすべての隠されたメタデータを抽出します！",
+    dropHere: "ここに画像をドロップしてください！", supportsFormats: "PNG、JPG、WebP をサポート — 複数のファイルを一度にドロップ",
+    browseFiles: "ファイルを参照", metadataResults: "メタデータ結果", inspecting: "ファイルを検査中...",
+    clearAll: "✕ すべてをクリア", footer: "すべての処理はブラウザで行われます。アップロードなし、追跡なし。🐭",
+    noMeta: "Stable Diffusion メタデータが見つかりません。", noMetaDesc: "ファイルはサポートされているツールからではないか、メタデータが削除された可能性があります。",
+    positivePrompt: "ポジティブプロンプト", negativePrompt: "ネガティブプロンプト",
+    generationParams: "生成パラメータ", copyRaw: "生データをコピー", copy: "コピー",
+    copied: "コピーしました！", pleaseDrop: "画像ファイルをドロップしてください！", sniffing: "検査中",
+    fileInspected: "ファイルを検査 —", withMeta: "SD メタデータ付き"
+  },
+  vi: {
+    peek: "Nhìn vào bên trong", aiGenerated: "được tạo bởi AI", images: "hình ảnh của bạn!",
+    drop: "Thả bất kỳ PNG nào được tạo bởi Stable Diffusion, AUTOMATIC1111, ComfyUI, Forge, InvokeAI và các công cụ khác — MetaMouse sẽ trích xuất tất cả các siêu dữ liệu ẩn cho bạn!",
+    dropHere: "Thả hình ảnh của bạn ở đây!", supportsFormats: "Hỗ trợ PNG, JPG, WebP — thả nhiều tệp cùng lúc",
+    browseFiles: "Duyệt tệp", metadataResults: "Kết quả siêu dữ liệu", inspecting: "Đang kiểm tra tệp của bạn...",
+    clearAll: "✕ Xóa tất cả", footer: "Tất cả xử lý xảy ra trong trình duyệt của bạn. Không tải lên, không theo dõi. 🐭",
+    noMeta: "Không tìm thấy siêu dữ liệu Stable Diffusion.", noMetaDesc: "Tệp có thể không từ công cụ được hỗ trợ hoặc siêu dữ liệu đã bị xóa.",
+    positivePrompt: "Lời nhắc tích cực", negativePrompt: "Lời nhắc tiêu cực",
+    generationParams: "Tham số tạo", copyRaw: "Sao chép thô", copy: "Sao chép",
+    copied: "Đã sao chép!", pleaseDrop: "Vui lòng thả tệp hình ảnh!", sniffing: "Đang kiểm tra",
+    fileInspected: "tệp đã được kiểm tra —", withMeta: "với siêu dữ liệu SD"
+  }
+};
+
+var currentLang = "en";
+
+function setLanguage(lang) {
+  currentLang = lang;
+  localStorage.setItem("metamouse_lang", lang);
+  updateUILanguage();
+}
+
+function setText(sel, text) {
+  var el = document.querySelector(sel);
+  if (el) el.textContent = text;
+}
+
+function setHtml(sel, html) {
+  var el = document.querySelector(sel);
+  if (el) el.innerHTML = html;
+}
+
+function updateUILanguage() {
+  var t = TRANSLATIONS[currentLang] || TRANSLATIONS.en;
+  setHtml(".mm-hero h1", t.peek + "<br><span>" + t.aiGenerated + "</span> " + t.images);
+  setText(".mm-hero > div > p", t.drop);
+  setText(".mm-drop-zone h2", t.dropHere);
+  setText(".mm-drop-zone p", t.supportsFormats);
+  setText(".mm-drop-zone .os-btn-primary", t.browseFiles);
+  setText(".mm-result-header h2", t.metadataResults);
+  setText(".clear-btn", t.clearAll);
+  setText(".mm-footer", t.footer);
+  document.documentElement.lang = currentLang;
+}
+
+// Load saved language and theme
+var savedLang = localStorage.getItem("metamouse_lang") || "en";
+document.getElementById("langSelect").value = savedLang;
+setLanguage(savedLang);
+
+// Theme toggle
+// Language change
+document.getElementById("langSelect").addEventListener("change", function(e) {
+  setLanguage(e.target.value);
+});
+
+var MASCOT_GOOD = "assets/good.png";
+var MASCOT_BAD = "assets/bad.png";
+var MASCOT_LOOKING = "assets/looking.png";
+var MASCOT_PEN = "assets/pen.png";
+var MASCOT_DOCUMENT = "assets/document.png";
+var MASCOT_LIKE = "assets/like.png";
+var MASCOT_NEUTRAL = "assets/server.png";
+
+var processedFiles = [];
+var dropZone = document.getElementById("dropZone");
+var fileInput = document.getElementById("fileInput");
+var results = document.getElementById("results");
+var filesGrid = document.getElementById("filesGrid");
+var clearBtn = document.getElementById("clearBtn");
+var heroImg = document.getElementById("hero-img");
+var resultMascot = document.getElementById("result-mascot");
+var resultSubtitle = document.getElementById("result-subtitle");
+var scrollTopBtn = document.getElementById("scrollTop");
+var imageModal = document.getElementById("imageModal");
+var modalImage = document.getElementById("modalImage");
+var modalClose = document.getElementById("modalClose");
+var modalTitle = document.getElementById("modalTitle");
+
+dropZone.addEventListener("click", function(){ fileInput.click(); });
+dropZone.addEventListener("dragover", function(e){ e.preventDefault(); dropZone.classList.add("dragover"); heroImg.src = MASCOT_LOOKING; });
+dropZone.addEventListener("dragleave", function(){ dropZone.classList.remove("dragover"); heroImg.src = MASCOT_LIKE; });
+dropZone.addEventListener("drop", function(e){ e.preventDefault(); dropZone.classList.remove("dragover"); handleFiles(Array.from(e.dataTransfer.files)); });
+fileInput.addEventListener("change", function(e){ handleFiles(Array.from(e.target.files)); });
+clearBtn.addEventListener("click", function(){
+  processedFiles = []; filesGrid.innerHTML = ""; results.style.display = "none";
+  heroImg.src = MASCOT_LIKE; fileInput.value = "";
+});
+window.addEventListener("scroll", function(){ scrollTopBtn.classList.toggle("visible", window.scrollY > 300); });
+scrollTopBtn.addEventListener("click", function(){ window.scrollTo({top:0,behavior:"smooth"}); });
+
+// Modal controls
+modalClose.addEventListener("click", function(){ imageModal.classList.remove("show"); });
+imageModal.addEventListener("click", function(e){ if(e.target===imageModal) imageModal.classList.remove("show"); });
+
+function handleFiles(files) {
+  var t = TRANSLATIONS[currentLang] || TRANSLATIONS.en;
+  var imgs = files.filter(function(f){ return f.type.startsWith("image/") || f.name.match(/\.png$/i); });
+  var loras = files.filter(function(f){ return f.name.match(/\.safetensors$/i); });
+  var allFiles = imgs.concat(loras);
+  
+  if (!allFiles.length) { alert(t.pleaseDrop); return; }
+  results.style.display = "block";
+  heroImg.src = MASCOT_PEN;
+  resultSubtitle.textContent = t.sniffing + " " + allFiles.length + " " + t.fileInspected.split("—")[0].trim() + "(s)...";
+  var done = 0;
+  
+  allFiles.forEach(function(file){
+    if (file.name.match(/\.safetensors$/i)) {
+      readSafetensorsMeta(file).then(function(info){
+        processedFiles.push(info);
+        renderCard(info);
+        done++;
+        updateResults(done, allFiles.length, t);
+      }).catch(function(err){
+        console.error("Error reading safetensors:", err);
+        done++;
+        updateResults(done, allFiles.length, t);
+      });
+    } else {
+      readFileMeta(file).then(function(info){
+        processedFiles.push(info);
+        renderCard(info);
+        done++;
+        updateResults(done, allFiles.length, t);
+      });
+    }
+  });
+  
+  setTimeout(function(){ results.scrollIntoView({behavior:"smooth",block:"start"}); }, 100);
+}
+
+function updateResults(done, total, t) {
+  if (done === total) {
+    var hasMeta = processedFiles.some(function(f){ return f.hasMeta; });
+    heroImg.src = hasMeta ? MASCOT_GOOD : MASCOT_BAD;
+    resultMascot.src = hasMeta ? MASCOT_GOOD : MASCOT_BAD;
+    var metaCount = processedFiles.filter(function(f){ return f.hasMeta; }).length;
+    resultSubtitle.textContent = done + " " + t.fileInspected + " " + metaCount + " " + t.withMeta;
+  }
+}
+
+function readFileMeta(file) {
+  return new Promise(function(resolve){
+    var reader = new FileReader();
+    reader.onload = function(e){
+      var bytes = new Uint8Array(e.target.result);
+      var thumbUrl = URL.createObjectURL(file);
+      var chunks = extractPNGChunks(bytes);
+      var meta = parseMeta(chunks, file.name);
+      resolve({name:file.name, size:file.size, thumbUrl:thumbUrl, hasMeta:meta.hasMeta, meta:meta, isImage:true});
+    };
+    reader.readAsArrayBuffer(file);
+  });
+}
+
+function readSafetensorsMeta(file) {
+  return new Promise(function(resolve){
+    var slice = file.slice(0, 10 * 1024 * 1024);
+    var reader = new FileReader();
+    reader.onload = function(e){
+      try {
+        var arrayBuffer = e.target.result;
+        var bytes = new Uint8Array(arrayBuffer);
+        
+        // Parse SafeTensors header: first 8 bytes = uint64 little-endian header length
+        if (bytes.length < 8) throw new Error("File too small");
+        var headerLen = 0;
+        for (var i = 7; i >= 0; i--) headerLen = headerLen * 256 + bytes[i];
+        if (headerLen <= 0 || headerLen > 50 * 1024 * 1024) throw new Error("Invalid header length");
+        
+        var headerBytes = bytes.slice(8, 8 + Math.min(headerLen, bytes.length - 8));
+        var headerStr = new TextDecoder("utf-8", {fatal: false}).decode(headerBytes);
+        var header = JSON.parse(headerStr);
+        
+        // Extract __metadata__
+        var metadata = header["__metadata__"] || {};
+        
+        // Extract tensor info
+        var tensorKeys = Object.keys(header).filter(function(k){ return k !== "__metadata__"; });
+        var tensorCount = tensorKeys.length;
+        var totalParams = 0;
+        var tensors = {};
+        var dtypes = {};
+        
+        tensorKeys.slice(0, 200).forEach(function(k){
+          var info = header[k];
+          tensors[k] = info;
+          if (info.shape) {
+            var params = info.shape.reduce(function(a,b){ return a*b; }, 1);
+            totalParams += params;
+          }
+          if (info.dtype) {
+            dtypes[info.dtype] = (dtypes[info.dtype] || 0) + 1;
+          }
+        });
+        
+        // Interpret metadata
+        var interpreted = interpretLoRAMeta(metadata);
+        
+        var meta = {
+          hasMeta: Object.keys(metadata).length > 0,
+          source: "LoRA (SafeTensors)",
+          prompt: null,
+          negativePrompt: null,
+          params: interpreted.params,
+          raw: interpreted.raw,
+          tensorInfo: {
+            tensorCount: tensorCount,
+            totalParams: totalParams,
+            tensors: tensors,
+            dtypes: dtypes,
+            dtypeList: Object.keys(dtypes).sort(function(a,b){ return dtypes[b]-dtypes[a]; })
+          },
+          trainedWords: interpreted.trainedWords,
+          networkType: interpreted.networkType,
+          baseModel: interpreted.baseModel,
+          dim: interpreted.dim,
+          alpha: interpreted.alpha,
+          description: interpreted.description
+        };
+        
+        resolve({
+          name: file.name,
+          size: file.size,
+          thumbUrl: "assets/document.png",
+          hasMeta: meta.hasMeta || tensorCount > 0,
+          meta: meta,
+          isLoRA: true,
+          tensorInfo: meta.tensorInfo
+        });
+      } catch(err){
+        console.error("SafeTensors parse error:", err);
+        resolve({
+          name: file.name,
+          size: file.size,
+          thumbUrl: "assets/document.png",
+          hasMeta: false,
+          meta: {hasMeta:false, source:"LoRA (SafeTensors)", prompt:null, negativePrompt:null, params:{}, raw:{}},
+          isLoRA: true,
+          tensorInfo: null
+        });
+      }
+    };
+    reader.readAsArrayBuffer(slice);
+  });
+}
+
+function interpretLoRAMeta(meta) {
+  var result = {
+    params: {},
+    raw: {},
+    networkType: null,
+    baseModel: null,
+    dim: null,
+    alpha: null,
+    trainedWords: [],
+    description: null
+  };
+  
+  var priorityKeys = ["ss_network_module", "ss_network_dim", "ss_network_alpha", "ss_base_model_version",
+    "ss_sd_model_name", "ss_steps", "ss_max_train_steps", "ss_epoch", "ss_num_epochs", "ss_learning_rate",
+    "ss_unet_lr", "ss_text_encoder_lr", "ss_lr_scheduler", "ss_optimizer", "ss_batch_size_per_device",
+    "ss_resolution", "ss_mixed_precision", "ss_clip_skip", "ss_noise_offset", "ss_seed", "ss_output_name",
+    "ss_training_comment", "modelspec.architecture", "modelspec.description", "modelspec.title", "modelspec.author"];
+  
+  var allKeys = Object.keys(meta);
+  
+  // Process priority keys first
+  priorityKeys.forEach(function(k){
+    if (meta[k] !== undefined) {
+      var label = k.replace(/^ss_/, "").replace(/_/g, " ");
+      label = label.replace(/\b\w/g, function(c){ return c.toUpperCase(); });
+      result.params[label] = String(meta[k]).slice(0, 300);
+      
+      // Extract special fields
+      if (k === "ss_network_module" || k === "network_module") {
+        result.networkType = detectLoRANetworkType(String(meta[k]));
+      }
+      if (k === "ss_base_model_version" || k === "ss_sd_model_name" || k === "modelspec.architecture") {
+        result.baseModel = String(meta[k]);
+      }
+      if (k === "ss_network_dim") result.dim = meta[k];
+      if (k === "ss_network_alpha") result.alpha = meta[k];
+      if (k === "ss_training_comment" || k === "training_comment") {
+        result.trainedWords = extractTriggerWordsFromComment(String(meta[k]));
+      }
+      if (k === "modelspec.description" || k === "description") {
+        result.description = String(meta[k]);
+      }
+    }
+  });
+  
+  // Process remaining keys as "raw"
+  allKeys.forEach(function(k){
+    if (priorityKeys.indexOf(k) === -1) {
+      var val = String(meta[k]);
+      if (val.length < 150) {
+        result.params[k] = val;
+      } else {
+        result.raw[k] = val;
+      }
+    }
+  });
+  
+  return result;
+}
+
+function detectLoRANetworkType(mod) {
+  if (!mod) return null;
+  mod = mod.toLowerCase();
+  if (mod.includes("loha")) return "LoHa";
+  if (mod.includes("lokr")) return "LoKr";
+  if (mod.includes("dora")) return "DoRA";
+  if (mod.includes("ia3")) return "IA³";
+  if (mod.includes("glora")) return "GLoRA";
+  if (mod.includes("full")) return "Full Fine-tune";
+  if (mod.includes("lora")) return "LoRA";
+  if (mod.includes("lycoris")) return "LyCORIS";
+  return mod.split(".").pop();
+}
+
+function extractTriggerWordsFromComment(text) {
+  if (!text) return [];
+  var out = [];
+  var colonMatch = text.match(/trigger[:\s]+([^\n]+)/i);
+  if (colonMatch) {
+    out = colonMatch[1].split(/[,;]+/).map(function(w){ return w.trim(); }).filter(Boolean);
+  }
+  return out.slice(0, 20);
+}
+
+function formatParamNumber(n) {
+  if (n >= 1e9) return (n/1e9).toFixed(2) + "B";
+  if (n >= 1e6) return (n/1e6).toFixed(2) + "M";
+  if (n >= 1e3) return (n/1e3).toFixed(1) + "K";
+  return String(n);
+}
+
+function extractPNGChunks(bytes) {
+  var sig = [137,80,78,71,13,10,26,10];
+  for (var i=0;i<8;i++) if (bytes[i]!==sig[i]) return {};
+  var chunks = {}; var pos = 8;
+  while (pos < bytes.length - 12) {
+    var len = ((bytes[pos]<<24)|(bytes[pos+1]<<16)|(bytes[pos+2]<<8)|bytes[pos+3]) >>> 0;
+    var type = String.fromCharCode(bytes[pos+4],bytes[pos+5],bytes[pos+6],bytes[pos+7]);
+    if (type === "IEND") break;
+    if (type === "tEXt" || type === "iTXt") {
+      var data = bytes.slice(pos+8, pos+8+len);
+      var nullIdx = -1;
+      for (var j=0;j<data.length;j++) { if (data[j]===0){nullIdx=j;break;} }
+      if (nullIdx > 0) {
+        var key = new TextDecoder().decode(data.slice(0,nullIdx));
+        var val;
+        if (type === "iTXt") {
+          var s = nullIdx+3; // skip comp flag, method
+          while (s < data.length && data[s]!==0) s++; s++; // lang tag
+          while (s < data.length && data[s]!==0) s++; s++; // trans keyword
+          val = new TextDecoder().decode(data.slice(s));
+        } else {
+          val = new TextDecoder().decode(data.slice(nullIdx+1));
+        }
+        chunks[key] = val;
+      }
+    }
+    pos += 12 + len;
+  }
+  return chunks;
+}
+
+function parseMeta(chunks, filename) {
+  var result = {hasMeta:false, source:"Unknown", prompt:null, negativePrompt:null, params:{}, raw:{}};
+
+  // A1111 / Forge
+  if (chunks["parameters"]) {
+    result.hasMeta = true;
+    var txt = chunks["parameters"];
+    result.source = txt.indexOf("Forge") > -1 ? "Stable Diffusion Forge" : "AUTOMATIC1111 / WebUI";
+    var negIdx = txt.indexOf("\nNegative prompt:");
+    var stepMatch = txt.search(/\nSteps:/);
+    if (negIdx > -1) {
+      result.prompt = txt.slice(0, negIdx).trim();
+      var afterNeg = txt.slice(negIdx + "\nNegative prompt:".length);
+      var endNeg = afterNeg.search(/\nSteps:/);
+      result.negativePrompt = endNeg > -1 ? afterNeg.slice(0, endNeg).trim() : afterNeg.trim();
+    } else if (stepMatch > -1) {
+      result.prompt = txt.slice(0, stepMatch).trim();
+    } else { result.prompt = txt.trim(); }
+    if (stepMatch > -1) {
+      var settingsLine = txt.slice(stepMatch+1);
+      var rx = /([\w ]+):\s*([^,\n]+)/g; var m;
+      while ((m = rx.exec(settingsLine)) !== null) result.params[m[1].trim()] = m[2].trim();
+    }
+    return result;
+  }
+
+  // ComfyUI
+  if (chunks["prompt"] || chunks["workflow"]) {
+    result.hasMeta = true; result.source = "ComfyUI";
+    if (chunks["prompt"]) {
+      try {
+        var wf = JSON.parse(chunks["prompt"]);
+        var prompts = [];
+        Object.values(wf).forEach(function(node){
+          if (node.class_type === "CLIPTextEncode" && node.inputs && node.inputs.text) prompts.push(node.inputs.text);
+          if (node.class_type === "KSampler" && node.inputs) {
+            var inp = node.inputs;
+            if (inp.steps) result.params["Steps"] = inp.steps;
+            if (inp.cfg) result.params["CFG scale"] = inp.cfg;
+            if (inp.sampler_name) result.params["Sampler"] = inp.sampler_name;
+            if (inp.seed) result.params["Seed"] = inp.seed;
+          }
+          if (node.class_type === "CheckpointLoaderSimple" && node.inputs && node.inputs.ckpt_name) result.params["Model"] = node.inputs.ckpt_name;
+        });
+        if (prompts.length) result.prompt = prompts.join("\n---\n");
+        result.raw["Full Workflow JSON"] = JSON.stringify(wf, null, 2);
+      } catch(e) { result.raw["prompt"] = chunks["prompt"]; }
+    }
+    return result;
+  }
+
+  // NovelAI
+  if (chunks["Description"] || chunks["Comment"]) {
+    result.hasMeta = true; result.source = "NovelAI";
+    if (chunks["Description"]) result.prompt = chunks["Description"];
+    if (chunks["Comment"]) {
+      try {
+        var c = JSON.parse(chunks["Comment"]);
+        if (c.prompt) result.prompt = c.prompt;
+        if (c.uc) result.negativePrompt = c.uc;
+        ["steps","sampler","scale","seed","model"].forEach(function(k){ if (c[k]!==undefined) result.params[k.charAt(0).toUpperCase()+k.slice(1)] = c[k]; });
+      } catch(e) { result.raw["Comment"] = chunks["Comment"]; }
+    }
+    return result;
+  }
+
+  // InvokeAI
+  var invKey = chunks["invokeai_metadata"] || chunks["sd-metadata"];
+  if (invKey) {
+    result.hasMeta = true; result.source = "InvokeAI";
+    try {
+      var inv = JSON.parse(invKey);
+      if (inv.positive_prompt || inv.prompt) result.prompt = inv.positive_prompt || inv.prompt;
+      if (inv.negative_prompt) result.negativePrompt = inv.negative_prompt;
+      ["steps","cfg_scale","seed","model","sampler","width","height"].forEach(function(k){
+        if (inv[k]!==undefined) result.params[k.replace("_"," ").replace(/\b\w/g,function(c){return c.toUpperCase();})] = inv[k];
+      });
+    } catch(e) { result.raw["invokeai_metadata"] = invKey; }
+    return result;
+  }
+
+  // Catch-all
+  var skip = {Software:1,Comment:1,XML:1};
+  Object.keys(chunks).forEach(function(k){
+    if (!skip[k]) { result.hasMeta = true; result.raw[k] = chunks[k]; }
+  });
+  if (result.hasMeta) result.source = "Unknown SD tool";
+  return result;
+}
+
+function renderCard(info) {
+  var t = TRANSLATIONS[currentLang] || TRANSLATIONS.en;
+  var card = document.createElement("div");
+  card.className = "file-card";
+  var kb = (info.size/1024).toFixed(1);
+  var statusClass = info.hasMeta ? "found" : "not-found";
+  var statusIcon = info.hasMeta ? MASCOT_GOOD : MASCOT_BAD;
+  var statusText = info.hasMeta ? "Found · " + info.meta.source : t.noMeta;
+  var body = "";
+
+  if (!info.hasMeta) {
+    body = '<div class="no-meta"><img src="' + MASCOT_BAD + '" alt=""><p>' + t.noMeta + '<br>' + t.noMetaDesc + '</p></div>';
+  } else {
+    var m = info.meta;
+    var cardId = "card_" + Date.now() + "_" + Math.random().toString(36).slice(2);
+    
+    // For LoRA files, show tabbed interface
+    if (info.isLoRA && info.tensorInfo) {
+      var tabs = [];
+      tabs.push({id: "info", label: "📋 General Info"});
+      if (info.tensorInfo.tensorCount > 0) tabs.push({id: "tensors", label: "🧮 Tensors"});
+      if (m.trainedWords && m.trainedWords.length > 0) tabs.push({id: "tags", label: "🏷️ Trigger Words"});
+      if (Object.keys(m.raw).length > 0) tabs.push({id: "raw", label: "{ } Raw JSON"});
+      
+      // Tab buttons
+      body += '<div style="display:flex;gap:4px;margin-bottom:12px;flex-wrap:wrap">';
+      tabs.forEach(function(tab, idx){
+        body += '<button class="tab-btn' + (idx===0?' active':'') + '" data-tab="' + cardId + '_' + tab.id + '" style="background:var(--dark);border:1px solid var(--border);border-radius:4px;padding:6px 12px;font-size:.75rem;font-weight:700;cursor:pointer;color:' + (idx===0?'var(--accent)':'var(--muted)') + ';transition:all .15s" onclick="switchTab(this)">' + tab.label + '</button>';
+      });
+      body += '</div>';
+      
+      // TAB 1: General Info
+      body += '<div class="tab-panel' + ' active' + '" id="' + cardId + '_info" style="display:block">';
+      
+      // Network badges
+      if (m.networkType || m.baseModel || m.dim || m.alpha) {
+        body += '<div style="margin-bottom:12px;display:flex;gap:8px;flex-wrap:wrap">';
+        if (m.networkType) body += '<span style="display:inline-flex;align-items:center;gap:6px;background:var(--dark);border:2px solid var(--accent);border-radius:10px;padding:8px 12px;font-weight:700;font-size:.85rem;color:var(--accent)">🔧 ' + escHtml(String(m.networkType)) + '</span>';
+        if (m.baseModel) body += '<span style="display:inline-flex;align-items:center;gap:6px;background:var(--dark);border:2px solid var(--accent);border-radius:10px;padding:8px 12px;font-weight:700;font-size:.85rem;color:var(--accent)">🎨 ' + escHtml(String(m.baseModel).replace(/^sd_|_v\d+/gi,' ').trim().slice(0,20)) + '</span>';
+        if (m.dim) body += '<span style="display:inline-flex;align-items:center;gap:6px;background:var(--dark);border:2px solid var(--accent);border-radius:10px;padding:8px 12px;font-weight:700;font-size:.85rem;color:var(--accent)">📐 Dim: ' + escHtml(String(m.dim)) + '</span>';
+        if (m.alpha) body += '<span style="display:inline-flex;align-items:center;gap:6px;background:var(--dark);border:2px solid var(--accent);border-radius:10px;padding:8px 12px;font-weight:700;font-size:.85rem;color:var(--accent)">α: ' + escHtml(String(m.alpha)) + '</span>';
+        body += '</div>';
+      }
+      
+      if (m.description) {
+        body += '<div class="meta-section"><div class="meta-section-title">📝 Description</div><div class="prompt-box">' + escHtml(m.description) + '</div></div>';
+      }
+      
+      // Training parameters table
+      var pkeys = Object.keys(m.params);
+      if (pkeys.length) {
+        body += '<div class="meta-section"><div class="meta-section-title">⚙️ Training Parameters</div><table class="meta-table">';
+        pkeys.forEach(function(k){ body += '<tr><td>'+escHtml(k)+'</td><td>'+escHtml(String(m.params[k]).slice(0,200))+'</td></tr>'; });
+        body += '</table></div>';
+      }
+      
+      body += '</div>'; // end info tab
+      
+      // TAB 2: Tensors
+      if (info.tensorInfo.tensorCount > 0) {
+        var mainDtype = info.tensorInfo.dtypeList[0] || '';
+        body += '<div class="tab-panel" id="' + cardId + '_tensors" style="display:none">';
+        body += '<div class="meta-section"><div class="meta-section-title">🧮 Tensor Layers <span style="font-size:.8rem;color:var(--muted);font-family:Nunito,sans-serif;font-weight:600">(' + info.tensorInfo.tensorCount + ' total · ' + formatParamNumber(info.tensorInfo.totalParams) + ' params)</span></div>';
+        
+        // Dtype distribution
+        if (Object.keys(info.tensorInfo.dtypes).length > 0) {
+          body += '<div style="margin-bottom:10px;display:flex;gap:6px;flex-wrap:wrap">';
+          info.tensorInfo.dtypeList.forEach(function(dt){
+            var count = info.tensorInfo.dtypes[dt];
+            var dtClass = 'dtype-other';
+            if (dt.includes('float32')) dtClass = 'dtype-fp32';
+            else if (dt.includes('float16')) dtClass = 'dtype-fp16';
+            else if (dt.includes('bfloat16') || dt.includes('bf16')) dtClass = 'dtype-bf16';
+            body += '<span style="display:inline-block;padding:2px 6px;border-radius:4px;font-size:.7rem;font-weight:700;background:var(--dark);color:var(--accent)">' + escHtml(dt) + ' ×' + count + '</span>';
+          });
+          body += '</div>';
+        }
+        
+        // Tensor table
+        var tensorEntries = Object.entries(info.tensorInfo.tensors).slice(0, 50);
+        if (tensorEntries.length > 0) {
+          body += '<div style="overflow-x:auto"><table class="tensor-table"><thead><tr><th>Name</th><th>Shape</th><th>dtype</th><th>Params</th></tr></thead><tbody>';
+          tensorEntries.forEach(function(e){
+            var tname = e[0]; var tinfo = e[1];
+            var shape = tinfo.shape ? tinfo.shape.join(" × ") : "—";
+            var params = tinfo.shape ? formatParamNumber(tinfo.shape.reduce(function(a,b){return a*b;},1)) : "—";
+            body += '<tr><td style="font-family:monospace;font-size:.72rem;max-width:260px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="'+escHtml(tname)+'">' + escHtml(tname.length > 40 ? tname.slice(0,38)+"…" : tname) + '</td>';
+            body += '<td style="font-family:monospace;font-size:.75rem;color:var(--accent)">' + escHtml(shape) + '</td>';
+            body += '<td style="font-size:.75rem;color:var(--muted)">' + escHtml(tinfo.dtype || "—") + '</td>';
+            body += '<td style="font-size:.75rem;color:var(--muted)">' + params + '</td></tr>';
+          });
+          body += '</tbody></table></div>';
+          if (Object.keys(info.tensorInfo.tensors).length > 50) {
+            body += '<p style="text-align:center;color:var(--muted);font-size:.75rem;margin-top:8px">Showing 50 of ' + info.tensorInfo.tensorCount + ' tensors</p>';
+          }
+        }
+        body += '</div>'; // end tensors tab
+      }
+      
+      // TAB 3: Trigger Words
+      if (m.trainedWords && m.trainedWords.length > 0) {
+        body += '<div class="tab-panel" id="' + cardId + '_tags" style="display:none">';
+        body += '<div class="meta-section"><div class="meta-section-title">🏷️ Trigger Words <button class="copy-btn" data-copy="' + esc(m.trainedWords.join(", ")) + '">Copy</button></div>';
+        body += '<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px">';
+        m.trainedWords.forEach(function(w){
+          body += '<span style="display:inline-block;background:var(--dark);border:1px solid var(--accent2);color:var(--accent);font-size:.7rem;font-weight:700;padding:3px 10px;border-radius:99px">' + escHtml(w) + '</span>';
+        });
+        body += '</div></div></div>';
+      }
+      
+      // TAB 4: Raw JSON
+      if (Object.keys(m.raw).length > 0 || Object.keys(m.params).length > 10) {
+        var rawJson = JSON.stringify(m, null, 2);
+        body += '<div class="tab-panel" id="' + cardId + '_raw" style="display:none">';
+        body += '<div class="meta-section"><div class="meta-section-title">{ } Raw JSON <button class="copy-btn" data-copy="' + esc(rawJson) + '">Copy raw</button></div>';
+        body += '<div class="prompt-box" style="background:var(--dark);white-space:pre-wrap;word-break:break-word;font-family:monospace;font-size:.7rem">' + escHtml(rawJson.slice(0, 2000)) + (rawJson.length > 2000 ? '...' : '') + '</div></div></div>';
+      }
+      
+    } else {
+      // Regular image metadata display
+      if (m.prompt) body += '<div class="meta-section"><div class="meta-section-title">' + t.positivePrompt + ' <button class="copy-btn" data-copy="' + esc(m.prompt) + '">' + t.copy + '</button></div><div class="prompt-box">' + escHtml(m.prompt) + '</div></div>';
+      if (m.negativePrompt) body += '<div class="meta-section"><div class="meta-section-title">' + t.negativePrompt + ' <button class="copy-btn" data-copy="' + esc(m.negativePrompt) + '">' + t.copy + '</button></div><div class="prompt-box" style="border-color:#e05c5c">' + escHtml(m.negativePrompt) + '</div></div>';
+      var pkeys = Object.keys(m.params);
+      if (pkeys.length) {
+        body += '<div class="meta-section"><div class="meta-section-title">' + t.generationParams + '</div><table class="meta-table">';
+        pkeys.forEach(function(k){ body += '<tr><td>'+escHtml(k)+'</td><td>'+escHtml(String(m.params[k]))+'</td></tr>'; });
+        body += '</table></div>';
+      }
+      Object.keys(m.raw).forEach(function(k){
+        var v = m.raw[k];
+        if (k === "Full Workflow JSON") {
+          body += '<div class="meta-section"><div class="meta-section-title">'+escHtml(k)+' <button class="copy-btn" data-copy="'+esc(v)+'">' + t.copyRaw + '</button> <button class="expand-btn" data-workflow="true">' + 'Expand' + '</button></div><div class="view-toggle" style="display:none;margin-top:8px"><button class="view-btn active" data-view="text">JSON Text</button><button class="view-btn" data-view="visual">Visual Nodes</button></div><div class="workflow-text" style="display:none" data-full-json="'+esc(v)+'">'+escHtml(v)+'</div><div class="workflow-canvas-container" style="display:none;"><canvas id="workflow-canvas-'+Date.now()+'"></canvas><div class="workflow-info">🖱️ Drag to pan • 🔍 Scroll to zoom</div></div></div>';
+        } else {
+          var short = v.length > 400 ? v.slice(0,400)+"…" : v;
+          body += '<div class="meta-section"><div class="meta-section-title">'+escHtml(k)+' <button class="copy-btn" data-copy="'+esc(v)+'">' + t.copyRaw + '</button></div><div class="prompt-box">'+escHtml(short)+'</div></div>';
+        }
+      });
+    }
+  }
+
+  card.innerHTML = '<div class="file-card-header"><img class="file-thumb" src="'+info.thumbUrl+'" alt="" style="width:70px;height:70px;cursor:pointer;"><div><div class="file-name">'+escHtml(info.name)+'</div><div class="file-size">'+kb+' KB</div></div><div class="status-badge '+statusClass+'"><img src="'+statusIcon+'" alt=""> '+statusText+'</div></div><div class="meta-body">'+body+'</div>';
+  
+  // Tab switching for LoRA
+  card.querySelectorAll(".tab-btn").forEach(function(btn){
+    btn.addEventListener("click", function(){
+      var targetId = btn.getAttribute("data-tab");
+      card.querySelectorAll(".tab-btn").forEach(function(b){ 
+        b.style.color = "var(--muted)";
+        b.style.borderColor = "var(--border)";
+      });
+      card.querySelectorAll(".tab-panel").forEach(function(p){ p.style.display = "none"; });
+      btn.style.color = "var(--accent)";
+      btn.style.borderColor = "var(--accent)";
+      var panel = document.getElementById(targetId);
+      if (panel) panel.style.display = "block";
+    });
+  });
+  
+  // Add click event to thumbnail to open modal
+  var thumbImg = card.querySelector(".file-thumb");
+  thumbImg.addEventListener("click", function(){
+    modalImage.src = info.thumbUrl;
+    modalTitle.textContent = info.name;
+    imageModal.classList.add("show");
+  });
+  
+  card.querySelectorAll(".copy-btn").forEach(function(btn){
+    btn.addEventListener("click", function(){
+      var text = btn.getAttribute("data-copy").replace(/&amp;/g,"&").replace(/&lt;/g,"<").replace(/&gt;/g,">").replace(/&quot;/g,'"').replace(/&#39;/g,"'");
+      navigator.clipboard.writeText(text).then(function(){
+        btn.classList.add("copied"); btn.textContent = t.copied;
+        setTimeout(function(){ btn.classList.remove("copied"); btn.textContent = btn.textContent.includes("raw") ? t.copyRaw : t.copy; }, 1500);
+      });
+    });
+  });
+
+  // Handle workflow viewer expansion
+  card.querySelectorAll(".expand-btn[data-workflow]").forEach(function(btn){
+    btn.addEventListener("click", function(){
+      var section = btn.parentElement.parentElement;
+      var toggle = section.querySelector(".view-toggle");
+      var canvasContainer = section.querySelector(".workflow-canvas-container");
+      var textBox = section.querySelector(".workflow-text");
+      
+      var isExpanded = toggle.style.display !== "none";
+      
+      if (isExpanded) {
+        // Collapse
+        btn.textContent = "Expand";
+        toggle.style.display = "none";
+        canvasContainer.style.display = "none";
+        textBox.style.display = "none";
+      } else {
+        // Expand - show toggle buttons and text by default
+        btn.textContent = "Collapse";
+        toggle.style.display = "flex";
+        textBox.style.display = "block";
+        canvasContainer.style.display = "none";
+      }
+    });
+  });
+
+  // Handle view toggle (Text vs Visual)
+  card.querySelectorAll(".view-btn").forEach(function(btn){
+    btn.addEventListener("click", function(){
+      var section = btn.parentElement.parentElement;
+      var canvasContainer = section.querySelector(".workflow-canvas-container");
+      var textBox = section.querySelector(".workflow-text");
+      var textView = section.querySelector(".view-btn[data-view='text']");
+      var visualView = section.querySelector(".view-btn[data-view='visual']");
+      var view = btn.getAttribute("data-view");
+      
+      // Remove active class from all buttons
+      textView.classList.remove("active");
+      visualView.classList.remove("active");
+      
+      if (view === "text") {
+        // Show text view
+        btn.classList.add("active");
+        textBox.style.display = "block";
+        canvasContainer.style.display = "none";
+      } else {
+        // Show visual view
+        btn.classList.add("active");
+        textBox.style.display = "none";
+        try {
+          // Get the full JSON from data attribute
+          var fullJson = textBox.getAttribute("data-full-json");
+          if (!fullJson) {
+            fullJson = textBox.textContent;
+          }
+          var workflow = JSON.parse(fullJson);
+          var canvas = canvasContainer.querySelector("canvas");
+          drawWorkflowGraph(canvas, workflow);
+          canvasContainer.style.display = "block";
+        } catch(e) {
+          console.error("Workflow parse error:", e);
+          canvasContainer.innerHTML = '<div style="padding:20px;color:var(--bad);text-align:center;">❌ Error: ' + e.message + '</div>';
+          canvasContainer.style.display = "block";
+        }
+      }
+    });
+  });
+
+  filesGrid.appendChild(card);
+}
+
+function switchTab(btn) {
+  var targetId = btn.getAttribute("data-tab");
+  var card = btn.closest(".file-card");
+  card.querySelectorAll(".tab-btn").forEach(function(b){ 
+    b.style.color = "var(--muted)";
+    b.style.borderColor = "var(--border)";
+  });
+  card.querySelectorAll(".tab-panel").forEach(function(p){ p.style.display = "none"; });
+  btn.style.color = "var(--accent)";
+  btn.style.borderColor = "var(--accent)";
+  var panel = document.getElementById(targetId);
+  if (panel) panel.style.display = "block";
+}
+
+function renderWorkflowViewer(container, workflow) {
+  container.innerHTML = "";
+  Object.keys(workflow).forEach(function(nodeId){
+    var node = workflow[nodeId];
+    var classType = node.class_type || "Unknown";
+    var inputs = node.inputs || {};
+    
+    var nodeDiv = document.createElement("div");
+    nodeDiv.className = "workflow-node";
+    
+    var title = document.createElement("div");
+    title.className = "workflow-node-title";
+    title.textContent = "[" + nodeId + "] " + classType;
+    nodeDiv.appendChild(title);
+    
+    var content = document.createElement("div");
+    content.className = "workflow-node-content";
+    
+    var inputKeys = Object.keys(inputs);
+    inputKeys.slice(0, 5).forEach(function(key){
+      var val = inputs[key];
+      if (typeof val === "object") val = JSON.stringify(val).slice(0, 50);
+      content.innerHTML += '<div><strong>' + escHtml(key) + ':</strong> ' + escHtml(String(val).slice(0, 60)) + '</div>';
+    });
+    if (inputKeys.length > 5) {
+      content.innerHTML += '<div style="color:var(--accent);font-size:.7rem;margin-top:4px">... and ' + (inputKeys.length - 5) + ' more</div>';
+    }
+    
+    nodeDiv.appendChild(content);
+    container.appendChild(nodeDiv);
+  });
+}
+
+function drawWorkflowGraph(canvas, workflow) {
+  var ctx = canvas.getContext("2d");
+  var nodeWidth = 180;
+  var nodeHeight = 100;
+  var hSpacing = 240;
+  var vSpacing = 140;
+  
+  // Build node map and calculate positions based on flow
+  var nodeMap = {};
+  var nodeIds = Object.keys(workflow);
+  var visited = {};
+  var nodePositions = {};
+  var columns = {};
+  
+  // Calculate topological levels (columns)
+  function calculateLevel(nodeId, visited, columns) {
+    if (visited[nodeId]) return columns[nodeId] || 0;
+    visited[nodeId] = true;
+    
+    var node = workflow[nodeId];
+    var maxInputLevel = -1;
+    
+    if (node.inputs) {
+      Object.values(node.inputs).forEach(function(val){
+        if (Array.isArray(val) && val.length === 2) {
+          var sourceId = String(val[0]);
+          if (workflow[sourceId]) {
+            var level = calculateLevel(sourceId, visited, columns);
+            maxInputLevel = Math.max(maxInputLevel, level);
+          }
+        }
+      });
+    }
+    
+    columns[nodeId] = maxInputLevel + 1;
+    return columns[nodeId];
+  }
+  
+  // Calculate levels for all nodes
+  nodeIds.forEach(function(id){
+    calculateLevel(id, {}, columns);
+  });
+  
+  // Group nodes by column
+  var columnGroups = {};
+  var maxCol = 0;
+  Object.keys(columns).forEach(function(nodeId){
+    var col = columns[nodeId];
+    maxCol = Math.max(maxCol, col);
+    if (!columnGroups[col]) columnGroups[col] = [];
+    columnGroups[col].push(nodeId);
+  });
+  
+  // Position nodes
+  var padding = 50;
+  Object.keys(columnGroups).forEach(function(colStr){
+    var col = parseInt(colStr);
+    var nodeIdsInCol = columnGroups[col];
+    var x = padding + col * hSpacing;
+    
+    nodeIdsInCol.forEach(function(nodeId, idx){
+      var y = padding + idx * vSpacing;
+      nodeMap[nodeId] = {
+        id: nodeId,
+        x: x,
+        y: y,
+        node: workflow[nodeId],
+        col: col,
+        row: idx
+      };
+    });
+  });
+  
+  // Set canvas size based on layout
+  var canvasWidth = padding * 2 + maxCol * hSpacing + nodeWidth;
+  var canvasHeight = padding * 2 + Math.max(1, Object.keys(columnGroups).reduce(function(max, col){
+    return Math.max(max, columnGroups[col].length);
+  }, 0)) * vSpacing + nodeHeight;
+  
+  canvas.width = canvasWidth;
+  canvas.height = canvasHeight;
+  
+  // Pan and zoom state
+  var state = {
+    offsetX: 0,
+    offsetY: 0,
+    zoom: 1,
+    dragging: false,
+    startX: 0,
+    startY: 0,
+    container: canvas.parentElement
+  };
+  
+  // Store state for event handlers
+  canvas.workflowState = state;
+  canvas.nodeMap = nodeMap;
+  canvas.nodeWidth = nodeWidth;
+  canvas.nodeHeight = nodeHeight;
+  canvas.nodeIds = nodeIds;
+  canvas.workflow = workflow;
+  
+  // Set container size
+  state.container.style.width = "100%";
+  state.container.style.height = "600px";
+  state.container.style.position = "relative";
+  
+  // Draw function
+  function redraw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.save();
+    ctx.translate(state.offsetX, state.offsetY);
+    ctx.scale(state.zoom, state.zoom);
+    
+    // Draw grid background
+    drawGrid(ctx, canvasWidth, canvasHeight);
+    
+    // Draw connections
+    ctx.strokeStyle = "#d4a000";
+    ctx.lineWidth = 2.5 / state.zoom;
+    nodeIds.forEach(function(id){
+      var node = workflow[id];
+      if (node.inputs) {
+        Object.values(node.inputs).forEach(function(val){
+          if (Array.isArray(val) && val.length === 2) {
+            var sourceId = String(val[0]);
+            if (nodeMap[sourceId]) {
+              var fromNode = nodeMap[sourceId];
+              var toNode = nodeMap[id];
+              ctx.beginPath();
+              ctx.moveTo(fromNode.x + nodeWidth, fromNode.y + nodeHeight / 2);
+              var controlX = (fromNode.x + nodeWidth + toNode.x) / 2;
+              var controlY = (fromNode.y + toNode.y) / 2;
+              ctx.quadraticCurveTo(controlX, controlY, toNode.x, toNode.y + nodeHeight / 2);
+              ctx.stroke();
+            }
+          }
+        });
+      }
+    });
+    
+    // Draw nodes
+    nodeIds.forEach(function(id){
+      var item = nodeMap[id];
+      var node = item.node;
+      var classType = node.class_type || "Unknown";
+      var isTextEncode = classType.indexOf("CLIPTextEncode") > -1;
+      var isKSampler = classType.indexOf("KSampler") > -1;
+      var isLoader = classType.indexOf("Loader") > -1 || classType.indexOf("Load") > -1;
+      var isVAE = classType.indexOf("VAE") > -1;
+      
+      // Node background color
+      if (isTextEncode) ctx.fillStyle = "#1a4a1a";
+      else if (isKSampler) ctx.fillStyle = "#2a1a4a";
+      else if (isLoader) ctx.fillStyle = "#4a3a1a";
+      else if (isVAE) ctx.fillStyle = "#1a3a4a";
+      else ctx.fillStyle = "#2a2a4a";
+      
+      // Rounded rectangle
+      var radius = 6;
+      ctx.beginPath();
+      ctx.moveTo(item.x + radius, item.y);
+      ctx.lineTo(item.x + nodeWidth - radius, item.y);
+      ctx.quadraticCurveTo(item.x + nodeWidth, item.y, item.x + nodeWidth, item.y + radius);
+      ctx.lineTo(item.x + nodeWidth, item.y + nodeHeight - radius);
+      ctx.quadraticCurveTo(item.x + nodeWidth, item.y + nodeHeight, item.x + nodeWidth - radius, item.y + nodeHeight);
+      ctx.lineTo(item.x + radius, item.y + nodeHeight);
+      ctx.quadraticCurveTo(item.x, item.y + nodeHeight, item.x, item.y + nodeHeight - radius);
+      ctx.lineTo(item.x, item.y + radius);
+      ctx.quadraticCurveTo(item.x, item.y, item.x + radius, item.y);
+      ctx.fill();
+      
+      // Node border
+      ctx.lineWidth = 2.5 / state.zoom;
+      ctx.strokeStyle = isTextEncode ? "#5cb85c" : isKSampler ? "#c85cc8" : isLoader ? "#d4a040" : isVAE ? "#40a0d4" : "#f0c040";
+      ctx.stroke();
+      
+      // Draw text in screen space (fixed size, not affected by zoom)
+      ctx.save();
+      ctx.resetTransform();
+      
+      // Title
+      var screenX = (item.x + 8) * state.zoom + state.offsetX;
+      var screenY = (item.y + 16) * state.zoom + state.offsetY;
+      ctx.fillStyle = "#f0c040";
+      ctx.font = "bold 11px Arial";
+      ctx.textAlign = "left";
+      var title = classType.replace(/([A-Z])/g, " $1").trim().slice(0, 16);
+      ctx.fillText(title, screenX, screenY);
+      
+      // Node ID
+      var screenIdY = (item.y + nodeHeight - 8) * state.zoom + state.offsetY;
+      ctx.fillStyle = "#999";
+      ctx.font = "9px Arial";
+      ctx.fillText("[" + id + "]", screenX, screenIdY);
+      
+      // Inputs preview
+      if (node.inputs && Object.keys(node.inputs).length > 0) {
+        ctx.fillStyle = "#ddd";
+        ctx.font = "8px monospace";
+        var inputs = node.inputs;
+        var inputKeys = Object.keys(inputs).slice(0, 2);
+        inputKeys.forEach(function(key, idx){
+          var v = String(inputs[key]).slice(0, 12);
+          if (typeof inputs[key] !== "object") {
+            var inputY = (item.y + 30 + idx * 11) * state.zoom + state.offsetY;
+            ctx.fillText(key.slice(0, 7) + ": " + v, screenX, inputY);
+          }
+        });
+      }
+      
+      ctx.restore();
+    });
+    
+    ctx.restore();
+  }
+  
+  // Event handlers
+  state.container.addEventListener("mousedown", function(e){
+    if (e.button === 0) {
+      state.dragging = true;
+      state.startX = e.clientX - state.offsetX;
+      state.startY = e.clientY - state.offsetY;
+      state.container.classList.add("dragging");
+    }
+  });
+  
+  state.container.addEventListener("mousemove", function(e){
+    if (state.dragging) {
+      state.offsetX = e.clientX - state.startX;
+      state.offsetY = e.clientY - state.startY;
+      redraw();
+    }
+  });
+  
+  state.container.addEventListener("mouseup", function(){
+    state.dragging = false;
+    state.container.classList.remove("dragging");
+  });
+  
+  state.container.addEventListener("mouseleave", function(){
+    state.dragging = false;
+    state.container.classList.remove("dragging");
+  });
+  
+  state.container.addEventListener("wheel", function(e){
+    e.preventDefault();
+    var oldZoom = state.zoom;
+    var zoomFactor = e.deltaY > 0 ? 0.9 : 1.1;
+    state.zoom = Math.max(0.5, Math.min(3, state.zoom * zoomFactor));
+    
+    var rect = canvas.getBoundingClientRect();
+    var x = e.clientX - rect.left;
+    var y = e.clientY - rect.top;
+    
+    state.offsetX -= (x / oldZoom - x / state.zoom) * oldZoom;
+    state.offsetY -= (y / oldZoom - y / state.zoom) * oldZoom;
+    
+    redraw();
+  });
+  
+  // Initial draw
+  redraw();
+}
+
+function drawGrid(ctx, width, height) {
+  ctx.strokeStyle = "#3a3a3a";
+  ctx.lineWidth = 1;
+  var gridSize = 50;
+  
+  for (var x = 0; x < width; x += gridSize) {
+    ctx.beginPath();
+    ctx.moveTo(x, 0);
+    ctx.lineTo(x, height);
+    ctx.stroke();
+  }
+  
+  for (var y = 0; y < height; y += gridSize) {
+    ctx.beginPath();
+    ctx.moveTo(0, y);
+    ctx.lineTo(width, y);
+    ctx.stroke();
+  }
+}
+
+function escHtml(s){ return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;"); }
+function esc(s){ return escHtml(s); }
+</script>
+</body>
+</html>
