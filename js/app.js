@@ -552,13 +552,14 @@
     if (!audio) return;
     localAudioBound = true;
     audio.addEventListener("timeupdate", function () {
-      if (!audio.duration) return;
-      const pct = (audio.currentTime / audio.duration) * 100;
+      const dur = audio.duration || 0;
+      const cur = audio.currentTime || 0;
+      const pct = dur > 0 ? (cur / dur) * 100 : 0;
       document.getElementById("progress-fill").style.width = pct + "%";
-      document.getElementById("cur-time").textContent = fmt(audio.currentTime);
-      document.getElementById("dur-time").textContent = fmt(audio.duration);
+      document.getElementById("cur-time").textContent = fmt(cur);
+      document.getElementById("dur-time").textContent = dur > 0 ? fmt(dur) : "0:00";
       const mm = document.getElementById("meta-duration");
-      if (mm) mm.textContent = fmt(audio.duration);
+      if (mm) mm.textContent = dur > 0 ? fmt(dur) : "0:00";
     });
     audio.addEventListener("loadedmetadata", function () {
       const mm = document.getElementById("meta-duration");
@@ -756,11 +757,19 @@
     if (!audio) return;
     if (isPlaying) audio.pause();
     audio.src = t.file;
+    audio.load();
     applyTrackUi(t);
     const rowIdx = order[currentQueueIdx];
     ensureTrackDuration(t, rowIdx);
     if (autoPlay) {
-      audio.play().catch(function () {});
+      const playPromise = audio.play();
+      if (playPromise && typeof playPromise.catch === "function") {
+        playPromise.catch(function (err) {
+          console.warn("Audio play failed:", err);
+          setPlayIcon(false);
+          isPlaying = false;
+        });
+      }
       setPlayIcon(true);
       isPlaying = true;
       document.getElementById("vinyl").classList.add("playing");
@@ -852,11 +861,24 @@
       return;
     }
     if (audio.paused) {
-      audio.play().catch(function () {});
-      setPlayIcon(true);
-      document.getElementById("vinyl").classList.add("playing");
-      document.getElementById("player-win").classList.add("playing-window");
-      isPlaying = true;
+      const playPromise = audio.play();
+      if (playPromise && typeof playPromise.catch === "function") {
+        playPromise.then(function () {
+          setPlayIcon(true);
+          isPlaying = true;
+          document.getElementById("vinyl").classList.add("playing");
+          document.getElementById("player-win").classList.add("playing-window");
+        }).catch(function (err) {
+          console.warn("Audio play failed:", err);
+          setPlayIcon(false);
+          isPlaying = false;
+        });
+      } else {
+        setPlayIcon(true);
+        document.getElementById("vinyl").classList.add("playing");
+        document.getElementById("player-win").classList.add("playing-window");
+        isPlaying = true;
+      }
     } else {
       audio.pause();
       setPlayIcon(false);

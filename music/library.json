@@ -1,0 +1,34 @@
+{
+  "generatedAt": "2026-05-20T00:00:00.000Z",
+  "playlists": [
+    {
+      "folder": "Suno",
+      "tracks": [
+        {
+          "file": "music/Suno/Hazy Echoes of Falling Down.mp3",
+          "name": "Hazy Echoes of Falling Down",
+          "artist": "Suno",
+          "emoji": "🎵"
+        },
+        {
+          "file": "music/Suno/Impossible Dreamwave (Liminal Lo-Fi Remix).mp3",
+          "name": "Impossible Dreamwave (Liminal Lo-Fi Remix)",
+          "artist": "Suno",
+          "emoji": "🎵"
+        },
+        {
+          "file": "music/Suno/Milk Glass Dawn.mp3",
+          "name": "Milk Glass Dawn",
+          "artist": "Suno",
+          "emoji": "🎵"
+        },
+        {
+          "file": "music/Suno/Somber Dreamcore Forecast.mp3",
+          "name": "Somber Dreamcore Forecast",
+          "artist": "Suno",
+          "emoji": "🎵"
+        }
+      ]
+    }
+  ]
+}

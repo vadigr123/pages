@@ -1,8 +1,4 @@
-/**
- * Кілька "папок" плейлистів: додай власні .mp3 у відповідні підкаталоги репозиторію.
- * На GitHub Pages шляхи відносні до кореня сайту (наприклад music/playlist/...).
- * Для обкладинки конкретного треку можна додати поле: cover: "img/thumbnail.player/your-cover.jpg"
- */
+
 (function () {
   window.PLAYER_THUMBNAILS = [
     "img/thumbnail.player/pose_5.png",
@@ -21,7 +17,7 @@
   /**
    * Fallback folders for local mode when the browser/server cannot list music/ root.
    */
-  window.MUSIC_PLAYLIST_FOLDERS = ["dreamcore"];
+  window.MUSIC_PLAYLIST_FOLDERS = ["Suno"];
   window.MUSIC_MANIFEST_PATH = "music/library.json";
 
   /**
