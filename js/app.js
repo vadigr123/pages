@@ -575,7 +575,7 @@
         audio.play();
         return;
       }
-      window.nextTrack();
+      window.nextTrack(true);
     });
     audio.addEventListener("error", function () {
       const tr = tracks();
@@ -679,7 +679,7 @@
         SoundCloudPlayer.play();
         return;
       }
-      window.nextTrack();
+      window.nextTrack(true);
     });
   }
 
@@ -745,6 +745,7 @@
     currentQueueIdx = ((queueIdx % tr.length) + tr.length) % tr.length;
     const t = tr[order[currentQueueIdx]];
     failedInRow = 0;
+    if (!t) return;
     if (useScForTrack(t)) {
       playScTrack(t, autoPlay);
       return;
@@ -898,12 +899,12 @@
     return m + ":" + (sec < 10 ? "0" : "") + sec;
   }
 
-  window.nextTrack = function () {
+  window.nextTrack = function (autoPlay) {
     const tr = tracks();
     if (!tr.length) return;
     let idx = currentQueueIdx + 1;
     if (idx >= tr.length) idx = 0;
-    loadTrack(idx, isPlaying);
+    loadTrack(idx, typeof autoPlay === "boolean" ? autoPlay : isPlaying);
   };
 
   window.prevTrack = function () {
